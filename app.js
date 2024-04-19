@@ -6,10 +6,8 @@ import morgan from "morgan";
 // load body-parsoer
 import bodyParser from "body-parser";
 
-/** 2. */
 // load method-override
 import methodOverride from "method-override";
-/** end of 2. */
 
 // load mongoose
 import mongoose from "mongoose";
@@ -37,10 +35,8 @@ app.use(morgan("tiny"));
 app.use(bodyParser.urlencoded({ extended: false }));    // support URL-encoded bodies
 app.use(bodyParser.json());        // parse application/json (support JSON-encoded bodies)
 
-/** 2. */
 // put methodOverride middleware with "_method" 
 app.use(methodOverride("_method"));
-/** end of 2. */
 
 app.get("/", (req, res) => {
   res.render("index",           // send --> render (ES6) : change package.json "type": "module"
@@ -52,7 +48,6 @@ app.get("/about", (req, res) => {
 });
 
 app.get("/ideas", (req, res) => {
-  /** 1. */
   Idea.find()                               // getting the result in 'ideas' collection by using find()
       .lean()
       .sort({ date: "desc" })
@@ -62,7 +57,6 @@ app.get("/ideas", (req, res) => {
           ideas : ideasDB,                  // ideas --> ideasIndex.handlebars(ideas) : ideasDB --> array of objects from DB
         });
       });
-  /** end of 1. */
 });
 
 app.get("/ideas/add", (req, res) => {
@@ -105,10 +99,47 @@ app.post("/ideas/add", (req, res) => {
 });
 
 
-/** 4. */
+
 app.delete("/ideas/:id", (req, res) => {    // :id is a parameter refers to the ObjectID in URL
+  console.log(req.params)
   Idea.deleteOne({_id: req.params.id }).then( () => {
     res.redirect("/ideas")
+  });
+});
+
+/** 3. */
+// to get the page for editing "edit.handlebars"
+// (:id) is the same as :id
+app.get("/ideas/edit/(:id)", (req, res) => {
+  Idea.findOne({
+    // use findOne to return only 1 object with ID
+    _id: req.params.id,
+  })
+  .lean()
+  .then( (ideaDB) => {
+    res.render('ideas/edit', {
+      idea: ideaDB    // idea (refer to edit.handlebars) : ideaDB (document from DB)
+    });
+  });
+});
+/** end of 3. */
+
+/** 4. */
+// to process the changed data of the idea from "edit.handlebars"
+app.put("/ideas/edit/:id", (req, res) => {
+  Idea.findOne({
+    // use findOne to return only 1 object with ID
+    _id: req.params.id,
+  })
+  .then( (ideaDB) => {
+    // updating value
+    ideaDB.title = req.body.title;
+    ideaDB.details = req.body.details;
+
+    // save updated ideaDB to mongoDB
+    ideaDB.save().then( () => {
+        res.redirect('/ideas');
+    });
   });
 });
 /** end of 4. */
@@ -126,4 +157,4 @@ const PORT = 3100;
 
 app.listen(PORT, () => {
   console.log(`Server started on port ${PORT}`);
-} );
+});

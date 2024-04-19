@@ -1,16 +1,12 @@
-========== set up Read operation (CRUD) ==========
+========== set up Update operation (CRUD) ==========
 
-1. show ideas note in route "/ideas" 
-    --> change codes in app.get("/ideas") in 'app.js'
-    --> get data from mongoDB and render 'ideas/ideasIndex.handlebars' with the data from mongoDB
+1. Edit 'ideasIndex.handlebars' : make the href to edit page
 
-========== set up Delete operation (CRUD) ==========
+2. create 'edit.handlebars' in folder 'ideas'
 
-2. import method-override from "method-override" in 'app.js' (npm i method-override)
-    and set up the methodOverride middleware with "_method"
-    --> in order to handle DELETE and UPDATE(PUT) 
+3. create route app.get("/ideas/edit/:id")
+    for rendering the page for editing
 
-3. modify the <form> setting in 'ideas/ideasIndex.handlebars' for handling DELETE ideas
-
-4. create route app.delete("/ideas/:id", (req, res) => { ... })
+4. create route app.put("/ideas/edit/:id")
+    for handling the change of the idea
 

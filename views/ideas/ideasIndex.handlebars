@@ -5,10 +5,12 @@
     <div class="card card-body mb-2">
         <h4>{{title}}</h4>
         <p>{{details}}</p>
-        <!-- make a button for Editing -->
-        <a href="#" class="btn btn-dark btn-block">Edit</a>
         
-        <!-- 3. -->
+        <!-- 1. -->
+        <!-- give the route to 'href' in <a> -->
+        <a href="/ideas/edit/{{_id}}" class="btn btn-dark btn-block">Edit</a>
+        <!-- end of 1. -->
+        
         <!-- give the route to 'action' and method='post' for the form -->
         <!-- _id refers to the ObjectID of each idea in Array ideas -->
         <!-- check mongodb the _id property name, different version of mongodb the id name can be different -->
@@ -20,8 +22,6 @@
             
             <input type="submit" class="btn btn-danger btn-block" value="Delete" />
         </form>
-        <!-- end of 3. -->
-
     </div>
 {{else}}
     <p>No note listed</p>
