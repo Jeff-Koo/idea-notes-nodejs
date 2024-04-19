@@ -1,12 +1,25 @@
-========== set up Update operation (CRUD) ==========
+========== MVC architectural pattern ==========
+    M : models
+    V : views
+    C : controllers
 
-1. Edit 'ideasIndex.handlebars' : make the href to edit page
+Separate the codes into MVC architectural pattern 
 
-2. create 'edit.handlebars' in folder 'ideas'
 
-3. create route app.get("/ideas/edit/:id")
-    for rendering the page for editing
+1. extract the function from routes (except "/" "/about", "*"). 
+    e.g.FROM:
+        app.get("/ideas/add", 
+            (req, res) => {
+                res.render("ideas/add");
+            }
+        );
 
-4. create route app.put("/ideas/edit/:id")
-    for handling the change of the idea
+        TO:
+        const getAddIdea = (req, res) => {
+            res.render("ideas/add");
+        }
+
+        app.get("/ideas/add", getAddIdea);
+
+2. check whether the function still works properly after extracting the functions. 
 

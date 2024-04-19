@@ -47,23 +47,13 @@ app.get("/about", (req, res) => {
   res.render("about");
 });
 
-app.get("/ideas", (req, res) => {
-  Idea.find()                               // getting the result in 'ideas' collection by using find()
-      .lean()
-      .sort({ date: "desc" })
-      .then( (ideasDB) => {                 // ideas: array of document objects from DB
-        console.log(ideasDB);
-        res.render("ideas/ideasIndex", {
-          ideas : ideasDB,                  // ideas --> ideasIndex.handlebars(ideas) : ideasDB --> array of objects from DB
-        });
-      });
-});
 
-app.get("/ideas/add", (req, res) => {
+/** 1. */
+const getAddIdea = (req, res) => {
   res.render("ideas/add");          // follow file structure, start from 'views' folder
-});
+}
 
-app.post("/ideas/add", (req, res) => {
+const postAddIdea = (req, res) => {
   let errors = [];  // an Array to store the error messages
   
   // push error message into errors[] if empty input
@@ -96,21 +86,29 @@ app.post("/ideas/add", (req, res) => {
       res.redirect("/ideas");                   // redirect refers to the route defined : app.get('xxx')
     });
   }
-});
+};
 
 
+const getIdeas = (req, res) => {
+  Idea.find()                               // getting the result in 'ideas' collection by using find()
+      .lean()
+      .sort({ date: "desc" })
+      .then( (ideasDB) => {                 // ideas: array of document objects from DB
+        console.log(ideasDB);
+        res.render("ideas/ideasIndex", {
+          ideas : ideasDB,                  // ideas --> ideasIndex.handlebars(ideas) : ideasDB --> array of objects from DB
+        });
+      });
+};
 
-app.delete("/ideas/:id", (req, res) => {    // :id is a parameter refers to the ObjectID in URL
+const deleteIdea = (req, res) => {    // :id is a parameter refers to the ObjectID in URL
   console.log(req.params)
   Idea.deleteOne({_id: req.params.id }).then( () => {
     res.redirect("/ideas")
   });
-});
+};
 
-/** 3. */
-// to get the page for editing "edit.handlebars"
-// (:id) is the same as :id
-app.get("/ideas/edit/(:id)", (req, res) => {
+const getEditIdea = (req, res) => {
   Idea.findOne({
     // use findOne to return only 1 object with ID
     _id: req.params.id,
@@ -121,12 +119,9 @@ app.get("/ideas/edit/(:id)", (req, res) => {
       idea: ideaDB    // idea (refer to edit.handlebars) : ideaDB (document from DB)
     });
   });
-});
-/** end of 3. */
+};
 
-/** 4. */
-// to process the changed data of the idea from "edit.handlebars"
-app.put("/ideas/edit/:id", (req, res) => {
+const putEditIdea = (req, res) => {
   Idea.findOne({
     // use findOne to return only 1 object with ID
     _id: req.params.id,
@@ -141,9 +136,24 @@ app.put("/ideas/edit/:id", (req, res) => {
         res.redirect('/ideas');
     });
   });
-});
-/** end of 4. */
+};
 
+app.get("/ideas", getIdeas);
+
+app.get("/ideas/add", getAddIdea);
+
+app.post("/ideas/add", postAddIdea);
+
+app.delete("/ideas/:id", deleteIdea);
+
+// to get the page for editing "edit.handlebars"
+// (:id) is the same as :id
+app.get("/ideas/edit/(:id)", getEditIdea);
+
+// to process the changed data of the idea from "edit.handlebars"
+app.put("/ideas/edit/:id", putEditIdea);
+
+/** end of 1. */
 
 // when the route is not handled by the routes above, then finally handle by route "404"
 // handle 404 - Not Found
