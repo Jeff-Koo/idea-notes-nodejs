@@ -6,20 +6,21 @@
 Separate the codes into MVC architectural pattern 
 
 
-1. extract the function from routes (except "/" "/about", "*"). 
-    e.g.FROM:
-        app.get("/ideas/add", 
-            (req, res) => {
-                res.render("ideas/add");
-            }
-        );
+After extracting functions from routes 
 
-        TO:
-        const getAddIdea = (req, res) => {
-            res.render("ideas/add");
-        }
+1. create folder 'controllers' under folder 'IdeaNotes'
 
-        app.get("/ideas/add", getAddIdea);
+2. inside folder 'controllers': create 'ideasController.js'
 
-2. check whether the function still works properly after extracting the functions. 
+3. move the extracted functions from 'app.js' to 'ideasController.js' 
+
+4. import Idea model in 'ideasController.js'
+
+5. add export in front of each function in 'ideasController.js' 
+
+6. import the functions from 'ideasController.js' to 'app.js'
+
+7. remove import Idea in 'app.js' because 'app.js' does not need to call Idea model
+
+8. check whether the function still works properly after moving and importing functions. 
 
