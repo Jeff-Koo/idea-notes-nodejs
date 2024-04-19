@@ -1,0 +1,17 @@
+<!-- mb-2 : margin bottom 2-->
+<!-- when render this page with an Array "ideas" contains multiple ideas -->
+<!-- loop through each idea in the Array "ideas", and create a <div class="card card-body mb-2"> for each idea -->
+{{#each ideas}}
+    <div class="card card-body mb-2">
+        <h4>{{title}}</h4>
+        <p>{{details}}</p>
+        <!-- make a button for Editing -->
+        <a href="#" class="btn btn-dark btn-block">Edit</a>
+        <!-- adding a form for delete button -->
+        <form action="#">
+            <input type="submit" class="btn btn-danger btn-block" value="Delete" />
+        </form>
+    </div>
+{{else}}
+    <p>No note listed</p>
+{{/each}}

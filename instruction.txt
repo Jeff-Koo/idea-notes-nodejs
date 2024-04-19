@@ -1,120 +1,52 @@
-========== Installation ==========
+1. create folder 'partials' in folder 'views'
 
-Install of  Node JS (incldue npm)
-    go to https://nodejs.org/
-    Download and execute .msi file, 
-    Install Node.js with the default setting (include ALL)
-    (if chocolatey is asked, you do not need to tick for chocolatey)
+2. create '_navbar.handlebars' in folder 'partials'
 
+3. move the html codes of navbar from 'main.handlebars' to '_nav.handlebars'
 
-Install of nvm 
-    Windows: 
-    Go to https://github.com/coreybutler/nvm-windows/releases
-    Download and execute: nvm-setup.exe
-    If the program asked for letting nvm to manage the installed node version, you may choose 'yes'
-    run CMD (as adminstrator) and try typing: 
-    nvm list available
+4. add {{> _navbar}} in 'main.handlebars'
 
-    Install another node via nvm
-        nvm install 16.17.0
+5. in 'views' folder: 
+    create '404.handlebars'
+    create 'about.handlebars'
+    create folder 'ideas'
 
-    MacOS:
-    run Terminal and type the following command:
-        curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.2/install.sh | bash
-    
-    ! check which shshell is using (bash / zsh), it is written on the top bar of the Terminal
-    bash shell: 
-        edit '.bashrc' file in Terminal by command:
-            nano ~/.bashrc
-        paste the following scripts in the '.bashrc' file: 
-            export NVM_DIR="$HOME/.nvm"
-            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-        save the '.bashrc' file by pressing 'control + X'
-        press 'Y' to answer "Yes" for saving modified buffer
-        press 'return/enter' key to confirm save the file with the filename
-    
-    zsh shell:
-        edit '.zshrc' file in Terminal by command:
-            nano ~/.zshrc
-        paste the following scripts in the '.zshrc' file: 
-            export NVM_DIR="$HOME/.nvm"
-            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-        save the '.zshrc' file by pressing 'control + X'
-        press 'Y' to answer "Yes" for saving modified buffer
-        press 'return/enter' key to confirm save the file with the filename
-    
+6. in folder 'ideas',
+    create 'ideasIndex.handlebars'
+    create 'add.handlebars'
 
-Install VS code + extensions in VS code
-    Html snippets				- type HTML faster
-	Rainbow Brackets			- colour brackets in pairs and make brackets easy to look
-	Material Icon Theme			- Icon of files and folders can be viewed easier
-    Auto Rename Tag             - modify HTML code easier
-	Prettier - Code Formatter	- use Alt+Shift+F (Windows) Option+Shift+F(MacOS) to format the codes 
+7. in 'app.js', write the get routes (refer to the routes in _navbar):
+    app.get("/about", (req, res)=>{ ... });
+    app.get("/ideas", (req, res)=>{ ... });
+    app.get("/ideas/add", (req, res)=>{ ... });
+    app.get("*", (req, res)=>{ ... });           /* for 404 */
 
 
-Install MongoDB community Server 
-    go to https://www.mongodb.com/try/download/community
-    choose the suitable Version and Platform to download the installer
 
-    go to https://www.mongodb.com/docs/manual/administration/install-community/ 
-    read the suitable instruction on installation 
+========== connect MongoDB and create Scheme with mongoose ==========
 
-~ some useful hotkeys in VS code:
-    Control + P         can type the path of the filename to search, get to the file faster
-    Tab                 auto complete, can avoid typo + switch the input field when using snippets
-    Ctrl + /	        comment the line / multi-line (may need to change the input method of the machine to ENG)
-    Alt + ↑/↓	        Move the whole line up/down
-    Shift + Alt + ↑/↓	copy the whole line while moving line up/down 
+8. in 'app.js': 
+    import bodyParser (npm install body-parser)
+        and set up bodyParser middleware
+             
+    import mongoose (npm install mongoose)
+        connect mongoDB by using mongoose 
 
-========== Coding ==========
+9. create 'models' folder inside folder 'IdeaNotes'
 
-1. create folder called 'IdeaNotes'
-
-2. Go to the directory with the command line tool: 
-    
-    Method 1. Open VS code
-                click 'File' on the top right corner of VS code
-                click 'Open Folder...' and open the folder 'IdeaNotes' created in 1.
-                click 'Terminal' on the top and select 'New Terminal' 
-                then the Terminal should be in the folder 'IdeaNotes'
-
-    Method 2. Open Command line Tool (Mac: Terminal.app || Windows: Git Bash)
-                use 'cd' command go to the folder 'IdeaNotes'
+10. inside 'models' folder: 
+    create 'Ideas.js'  (import mongoose and make Scheme)
 
 
-3.  npm init
+========== set up Create operation (CRUD) ==========
 
-4.  npm install express 
-    npm i express-handlebars 
-    npm i nodemon --save-dev 
-    npm i morgan
+11. in 'app.js': import Idea from "./models/Ideas.js"
 
-open VS code:
+12. add route app.post("/ideas/add", (req, res) => { ... })
+    coding for handling the input from the <form> in 'add.handlebars'
 
-5.  edit 'package.json', make the application use nodemon for development in ES6
-    Add the following Script: 
-    "scripts" : {
-        "dev" : "nodemon app.js"
-    }
-    "type" : "module"
+13. if add notes success, you can see the inserted document in mongoDB by using find() in collections 'ideas'
+    use note-dev
+    db.ideas.find().pretty()
 
 
-6. in 'app.js': 
-    import libraries (express, handlebars, morgan)
-    set up middlewares (express, handlebars, morgan)
-    set up route for '/' (Home Page)
-    set up PORT for the app
-
-7. create folder 'views/layouts'
-
-8. create 'main.handlebars' in folder 'views/layouts'
-    copy the navbar from bootstrap and modify it 
-    add {{{body}}} in 'main.handlebars' 
-
-9. create 'index.handlebars' in folder 'views'
-    learn what {{}} means in handlebars 
-        --> handlebars substitute {{}} with the object from 'app.js' according to the name inside {{}}
-        e.g. {{title}}  is substituted by  {title : "Welcome"}
-
-
-10. start the app with "npm run dev"
