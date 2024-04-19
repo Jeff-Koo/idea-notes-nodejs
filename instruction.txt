@@ -1,52 +1,16 @@
-1. create folder 'partials' in folder 'views'
+========== set up Read operation (CRUD) ==========
 
-2. create '_navbar.handlebars' in folder 'partials'
+1. show ideas note in route "/ideas" 
+    --> change codes in app.get("/ideas") in 'app.js'
+    --> get data from mongoDB and render 'ideas/ideasIndex.handlebars' with the data from mongoDB
 
-3. move the html codes of navbar from 'main.handlebars' to '_nav.handlebars'
+========== set up Delete operation (CRUD) ==========
 
-4. add {{> _navbar}} in 'main.handlebars'
+2. import method-override from "method-override" in 'app.js' (npm i method-override)
+    and set up the methodOverride middleware with "_method"
+    --> in order to handle DELETE and UPDATE(PUT) 
 
-5. in 'views' folder: 
-    create '404.handlebars'
-    create 'about.handlebars'
-    create folder 'ideas'
+3. modify the <form> setting in 'ideas/ideasIndex.handlebars' for handling DELETE ideas
 
-6. in folder 'ideas',
-    create 'ideasIndex.handlebars'
-    create 'add.handlebars'
-
-7. in 'app.js', write the get routes (refer to the routes in _navbar):
-    app.get("/about", (req, res)=>{ ... });
-    app.get("/ideas", (req, res)=>{ ... });
-    app.get("/ideas/add", (req, res)=>{ ... });
-    app.get("*", (req, res)=>{ ... });           /* for 404 */
-
-
-
-========== connect MongoDB and create Scheme with mongoose ==========
-
-8. in 'app.js': 
-    import bodyParser (npm install body-parser)
-        and set up bodyParser middleware
-             
-    import mongoose (npm install mongoose)
-        connect mongoDB by using mongoose 
-
-9. create 'models' folder inside folder 'IdeaNotes'
-
-10. inside 'models' folder: 
-    create 'Ideas.js'  (import mongoose and make Scheme)
-
-
-========== set up Create operation (CRUD) ==========
-
-11. in 'app.js': import Idea from "./models/Ideas.js"
-
-12. add route app.post("/ideas/add", (req, res) => { ... })
-    coding for handling the input from the <form> in 'add.handlebars'
-
-13. if add notes success, you can see the inserted document in mongoDB by using find() in collections 'ideas'
-    use note-dev
-    db.ideas.find().pretty()
-
+4. create route app.delete("/ideas/:id", (req, res) => { ... })
 
