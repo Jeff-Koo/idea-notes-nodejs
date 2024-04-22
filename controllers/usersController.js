@@ -56,13 +56,11 @@ export const postProfile = (req, res) => {
             user.avatar.data = avatarData;
             user.avatar.contentType = avatarContentType;
 
-            /** 6. */
             // after getting the data of the image file, 
             // delete the temporate file in folder 'uploads'
             fs.unlink(req.file.path, (err) => {
                 if (err) throw err;
             });
-            /** end of 6. */
 
             user.save().then( ()=> {
                 req.flash("success_msg", "avatar uploaded!")
@@ -77,7 +75,6 @@ export const postProfile = (req, res) => {
     
 };
 
-/** 5. */
 export const deleteProfile = (req, res) => {
     User.updateOne(
         { _id : res.locals.user._id },
@@ -87,7 +84,6 @@ export const deleteProfile = (req, res) => {
         res.redirect("/users/profile")
     });
 };
-/** end of 5. */
 
 
 
@@ -195,9 +191,7 @@ export const getProfile = (req, res) => {
     res.render("users/profile", { 
         name : res.locals.user.name,
         email : res.locals.user.email,
-        /** 2.  */
         avatar : res.locals.user.avatar,
-        /** end of 2.  */
     });
 };
 
