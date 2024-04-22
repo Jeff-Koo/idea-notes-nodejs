@@ -117,7 +117,6 @@ export const putEditIdea = (req, res) => {
 };
 
 
-/** 4. */
 // write the function for getting data from mongoDB 
 //                        and rendering 'records.handlebars'
 export const getRecords = (req, res) => {
@@ -152,5 +151,3 @@ export const getRecords = (req, res) => {
       // records --> 'ideas/index.handlebars'(records) : recordsDB --> array of document objects from mongoDB
   })
 };
-/** end of 4. */
-

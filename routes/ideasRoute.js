@@ -38,11 +38,8 @@ router.route("/:id").delete(deleteIdea);
 router.route("/edit/:id").get(getEditIdea).put(putEditIdea);
 
 
-
-/** 3.  */
 // write a route for calling getRecords() function in 'ideasController.js'
 // remember to import { getRecords } from "../controllers/ideasController.js";
 router.get("/records", getRecords);
-/** end of 3. */
 
 export default router;

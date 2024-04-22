@@ -1,169 +1,26 @@
-========== Learn about aggregate ==========
+========== showing static contents (images) in NodeJS website ==========
+    need to set a static folder 'public'
 
-    - Example for explain $lookup and $unwind 
-    - Set the sample data with 2 collections 
+1. inside folder 'views':
+    create folder 'public'
 
-use test
+2. inside folder 'public':
+    create folder 'img'
 
-db.classes.insertMany([
-    { _id : "classA", data : "A" }, 
-    { _id : "classB", data : "B" }, 
-    { _id : "classC", data : "C" }, 
-    { _id : "classD", data : "D" }, 
-])
+3. inside folder 'img':
+    put some image files 
+        - favicon.ico (may use https://www.favicon.cc/ to draw .ico file)
+        - logo.png
 
-db.students.insertMany([
-    { _id : "student1", classData : "A" },
-    { _id : "student2", classData : "A" },
-    { _id : "student3", classData : "A" },
-    { _id : "student4", classData : "B" },
-    { _id : "student5", classData : "B" },
-    { _id : "student6", classData : "D" },
-])
+4. in 'app.js': 
+    add code with express.static 
 
+5. in '_navbar.handlebars': 
+    add <div><img /></div> for showing 'logo.png' 
 
-========== $lookup ==========
+6. in 'main.handlebars': 
+    add <link rel="icon"> for showing 'favicon.ico'
+    (animated 'favicon.ico' only works in Firefox)
 
-db.classes.aggregate([
-    {
-        '$lookup': {
-            'from': 'students', 
-            'localField': 'data', 
-            'foreignField': 'classData', 
-            'as': 'studentsInClass'
-        }
-    }
-])
-
-
-result (contains multiple Objects in studentsInClass[]):
-
-the documents in collection 'students' which has 'classData' == 'A'
-will push into studentsInClass[] of the object from 'classes' with data : 'A' 
-
-
-{ _id: 'classA',
-  data: 'A',
-  studentsInClass: 
-  [ { _id: 'student1', classData: 'A' },
-    { _id: 'student2', classData: 'A' },
-    { _id: 'student3', classData: 'A' } ] 
-}
-
-{ _id: 'classB',
-  data: 'B',
-  studentsInClass: 
-  [ { _id: 'student4', classData: 'B' },
-    { _id: 'student5', classData: 'B' } ] 
-}
-
-{ _id: 'classC', data: 'C', studentsInClass: []}
-
-{ _id: 'classD',
-  data: 'D',
-  studentsInClass: [ { _id: 'student6', classData: 'D' } ] 
-}
-
-
-
-========== $unwind ==========
-
-// add a stage of $unwind afte $lookup
-db.classes.aggregate([
-    {
-        '$lookup': {
-            'from': 'students', 
-            'localField': 'data', 
-            'foreignField': 'classData', 
-            'as': 'studentsInClass'
-        }
-    },
-    {
-        '$unwind' : {
-            path: '$studentsInClass',
-            preserveNullAndEmptyArrays: true
-        }
-    }
-])
-
-result (split the array, 1 document is splited into 3 documents) : 
-
-{ _id: 'classA',
-  data: 'A',
-  studentsInClass: { _id: 'student1', classData: 'A' } 
-}
-  
-{ _id: 'classA',
-  data: 'A',
-  studentsInClass: { _id: 'student2', classData: 'A' } 
-}
-
-{ _id: 'classA',
-  data: 'A',
-  studentsInClass: { _id: 'student3', classData: 'A' } 
-}
-
-{ _id: 'classB',
-  data: 'B',
-  studentsInClass: { _id: 'student4', classData: 'B' } 
-}
-
-{ _id: 'classB',
-  data: 'B',
-  studentsInClass: { _id: 'student5', classData: 'B' }
-}
-
-{ _id: 'classC', data: 'C' }    <-- this records remains because "preserveNullAndEmptyArrays: true"
-
-{ _id: 'classD',
-  data: 'D',
-  studentsInClass: { _id: 'student6', classData: 'D' } 
-}
-
-
-
-~. may make use of MongoDB Compass to practice using aggregate
-    - select the 'classes' collection
-    - choose the tab 'Aggregation' (next to the current 'Documents' tab)
-   
-    - select '$lookup', and it will give the template code for using '$lookup' 
-        - fill in the fields required, 
-            if the information is correctly inputted, 
-            you can preview the result on the right-side
-
-    - click "ADD STAGE" button and set up '$unwind'
-
-    - finally, click "EXPORT TO LANGUAGE", 
-        Export Pipeline To: "NODE"
-        copy the pipeline 
-
-
-
-========== NodeJS : aggregate of mongoDB (useful) ==========
-    we want to show the author 'name' of the notes 
-
-
-1. in folder 'ideas': 
-    make a 'records.handlebars' page 
-     - this page shows every ideas, and the corresponding author 
-
-
-2. in 'views/partials/_navbar.handlebars': 
-    add <a href="/ideas/records">Show All Records</a> after <a>Add Notes</a> 
-
-
-3. in 'ideasRoute.js': 
-    write the route for calling the function getRecords in 'ideasController.js'
-        router.get("/records", getRecords);
-    remember to  import { getRecords } from "ideasController.js"
-
-
-4. in 'ideasController.js':
-    write the function for getting data from mongoDB and rendering 'records.handlebars'
-        export const getRecords = (req, res) => { ... };
-
-5. access localhost:3100/ideas/records to check the result
-    the page should show all the notes with the author name 
-
-
+7. check whether the image show properly (especially in Add Notes page, Edit Note page)
 
