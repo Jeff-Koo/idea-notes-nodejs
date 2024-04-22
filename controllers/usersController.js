@@ -1,7 +1,86 @@
 import bcrypt from "bcryptjs";
 import passport from "passport";
 
+/** 5. import necessary packages */
+import multer from "multer";
+import * as fs from "fs";
+/** end of 5. */
+
 import User from "../models/Users.js";
+
+/** 6. */
+const storageSetting = multer.diskStorage({
+    destination : (req, file, cb) => {
+        cb(null, "./uploads");
+    },
+    filename : (req, file, cb) => {
+        cb(null, file.originalname);
+    },
+});
+/** end of 6. */
+
+/** 7. */
+// "avatarUpload" refers to <input> in 'profile.handlebars'
+export const uploadAvatar = multer({ 
+    storage: storageSetting,
+    fileFilter : (req, file, cb) => {
+        const mimetype = file.mimetype;
+        if (
+            mimetype === "image/png" ||
+            mimetype === "image/jpg" ||
+            mimetype === "image/jpeg" || 
+            mimetype === "image/gif"
+        ) {
+            // only accept jpeg, jpg, png, gif
+            cb(null, true);
+        } else {
+            // not allow other file types
+            // flash an error message to user 
+            req.flash("error_msg", "Wrong file type for avatar! ");
+            cb(null, false);
+        }
+    }
+}).single("avatarUpload");  // "avatarUpload" refers to <input> in 'profile.handlebars'
+/** end of 7. */
+
+
+/** 3. */
+export const postProfile = (req, res) => {
+    
+    /** 8. */
+    // use findOne to return only 1 object 
+    User.findOne({ _id : res.locals.user._id })
+    .then( (user) => {
+
+        if (req.file) {
+            // in case there is file to be uploaded 
+
+            // two variables for storing the information of the avatar image 
+            // when fs.readFileSync() is called, NodeJS will wait for fs.readFileSync() to get executed 
+            // req.file.path  refers to  "/uploads/<filename>"
+            let avatarData = fs.readFileSync(req.file.path).toString("base64");
+            let avatarContentType = req.file.mimetype;
+    
+    
+            user.avatar.data = avatarData;
+            user.avatar.contentType = avatarContentType;
+    
+            user.save().then( ()=> {
+                req.flash("success_msg", "avatar uploaded!")
+                res.redirect("/users/profile")
+            });
+        } else {
+            // in case there is no file, but clicked the 'Upload Avatar' button
+            req.flash("error_msg", "Choose a Correct File before clicking 'Upload Avatar' button")
+            res.redirect("/users/profile");
+        }
+    });
+    /** end of 8. */
+    
+    // res.redirect("/users/profile")
+};
+/** end of 3. */
+
 
 
 export const getRegister = (req, res) => {
@@ -104,13 +183,10 @@ export const getLogout = (req, res) => {
     res.redirect("/users/login")
 };
 
-/** 4. */
 export const getProfile = (req, res) => {
     res.render("users/profile", { 
         name : res.locals.user.name,
         email : res.locals.user.email,
     });
 };
-/** end of 4. */
-
 

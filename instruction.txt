@@ -1,40 +1,48 @@
-========== prepare User Profile page for later upload avatar image ==========
+========== upload image by using multer ==========
 
-1. in folder 'views/users':
-    create 'profile.handlebars'
-        show current user information
-            - name
-            - email
-            - avatar (will show later)
-            - HTML form for uploading avatar
+1. npm install multer
 
-2. in '_navbar.handlebars': 
-    add hyperlink item for accessing 'profile' page
-    <li>
-        <a class="nav-link" href="/users/profile">Profile</a>
-    </li>
+2. write post route in 'usersRoute.js' for "/profile":
+    router.post("/profile", postProfile);
+    remember to import { postProfile } from "../controllers/usersController.js"
 
-3. write get route in 'usersRoute.js' for "/profile":
-    router.get("/profile", getProfile);
-    remember to import { getProfile } from "../controllers/usersController.js"
+3. write the function postProfile in 'usersController.js':
+    export const postProfile = (req, res) => { 
+        res.redirect("/users/profile") 
+    };
+    // for now simply redirect to profile page after clicking the 'Upload Avatar' button
 
-4. write the function getProfile in 'usersController.js':
-    export const getProfile = (req, res) => { ... };
+4. create folder 'uploads' in folder 'IdeaNotes'
 
-5. check whether the 'Profile' page render correctly.
 
-6. modify 'Users.js' in folder 'models'
-    add 1 more field called "avatar" with 2 fields inside "avatar"
-        
-        avatar : {
-            data: {
-                type : Buffer,
-            }, 
-            contentType: {
-                type : String,
-            }
-        },
-    
-    * we are going to store image in mongoDB in format of Base64 (type : Buffer)
+===== inside 'usersController.js' do the following steps: ===== 
 
-~ continue upload image in the next Step
+5. import necessary packages: 
+    import multer from "multer"
+    import * as fs from "fs";
+
+6. make the setting of storage in multer
+    - set destination   (which folder the input file put into temporarily)
+    - set filename      (what name should the input file be in the backend server)
+   
+7. create function for uploading image with multer:
+    export const uploadAvatar = multer({ 
+        storage: storageSetting,
+        fileFilter : (req, res) => { /* set filter: what type of file can be uploaded) */  }   
+    }).single("avatarUpload");
+
+8. in 'usersController.js':  postProfile() :
+    write codes to store the data of image to mongoDB
+    remove  res.redirect("/users/profile")  
+
+
+===== modify post route in 'usersRoute.js' =====
+
+9.  import uploadAvatar from "../controllers/usersController.js"
+    router.post("/profile", uploadAvatar, postProfile);
+
+10. check mongoDB to see whether the image is uploaded and saved in mongoDB
+    if uploaded successfully, 
+        inside collection 'users', the document of the user will have the field 'avatar' Object,
+        which contains 'data' and 'contentType'
+

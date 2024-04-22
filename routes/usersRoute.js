@@ -1,7 +1,7 @@
 import express from "express";
 
 import { getRegister, postRegister, getLogin, postLogin, getLogout, 
-    getProfile} 
+    getProfile, postProfile, uploadAvatar} 
 from "../controllers/usersController.js";
 
 const router = express.Router();
@@ -20,9 +20,16 @@ router.route("/login").get(getLogin).post(postLogin);
 // router.get("/logout", getLogout);
 router.route("/logout").get(getLogout);
 
-/** 3. */
 router.get("/profile", getProfile);
-/** end of 3. */
+
+/** 2. */
+// router.post("/profile", postProfile);
+/** end of 2. */
+
+
+/** 9. */
+router.post("/profile", uploadAvatar, postProfile);
+/** end of 9. */
 
 
 export default router;
