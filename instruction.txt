@@ -1,38 +1,30 @@
-========== modify 'Ideas.js' in models ==========
+========== set cookie to logout user if user idle for a long time ==========
+
+1. in 'app.js':
+    set cookie in express-session 
+    if user logged in but idle for 30 second, 
+    then the cookie will clear and the user is logged out
     
-    === we want to know who is the author for the idea notes ===
 
-1. in folder 'models': in 'Ideas.js': 
-    add 1 more field called "userID" with 
-        type : mongoose.Types.ObjectId,
-        (do not add  reuqired:true  at this point )
-    
-2. in 'ideasController.js' : postAddIdea(): 
-    add userID in newUser
-    
-3. try add a new idea, check whether the newly inserted idea contains  'userID' field with 'ObjectId'
-    use note-dev
-    db.ideas.find().pretty()
+========== create a private file to protect important information ==========
+    '.env' file is a file to store secret environment variables
 
+2. install dotenv package by the following command:
+    npm i dotenv
 
-    === the user should only see the notes created by himself ===
+3. in folder 'IdeaNotes' : 
+    create '.env' file
+        set PORT number & the URI for mongoDB
 
-4. in 'ideasController.js' : getIdeas(): 
-    add the query of {userID : res.locals.user._id} inside find()
+4. in 'app.js': 
+    import dotenv from "dotenv";
+    dotenv.config();
 
-5. check whether the changes applied successfuly
-
-    if success, the page will be :
-        userA can only see noteA (created by userA)
-        userB can only see noteB (created by userB)
-
-6. clear the 'ideas' collection to prevent unexpected error
-    db.ideas.drop()
-
-
-7. modify 'Ideas.js' in models, in 'Ideas.js': 
-    add 1 more property in field "userID": 
-        required : true 
-
-
+5. in 'app.js':
+    change some lines to use the value in .env
+      - mongoose
+          .connect(process.env.mongoURI)
+          .then...
+        
+      - const PORT = process.env.PORT || 3200;
 

@@ -31,11 +31,7 @@ export const postAddIdea = (req, res) => {
     const newUser = {
       title: req.body.title,
       details: req.body.details,
-
-      /** 2. */
       userID : res.locals.user._id, // get the user._id which stored in express-session 
-      /** end of 2. */
-
     };
 
     new Idea(newUser).save().then(() => {
@@ -46,9 +42,7 @@ export const postAddIdea = (req, res) => {
 };
 
 export const getIdeas = (req, res) => {
-  /** 4. */
   Idea.find( {userID : res.locals.user._id} ) // getting the result in 'ideas' collection by using find()
-  /** end of 4. */
     .lean()
     .sort({ date: "desc" })
     .then((ideasDB) => {

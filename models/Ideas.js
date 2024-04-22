@@ -13,16 +13,11 @@ const IdeaSchema = new Schema( {
         type : String,
         required : true,
     },
-    /** 1. */
     userID : {
         // set type to be _id in mongoDB
         type : mongoose.Types.ObjectId,
-        
-        /** 7. */
         required : true,
-        /** end of 7. */
     },
-    /** end of 1. */
     date : {
         type : Date,
         default : Date.now,
