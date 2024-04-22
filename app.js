@@ -20,16 +20,16 @@ mongoose
   .catch( (err) => console.log(err) );
 
 
-/** 6. */
-import { getAddIdea, postAddIdea, getIdeas, 
-          deleteIdea, getEditIdea, putEditIdea } 
-from "./controllers/ideasController.js";
-/** end of 6. */
+/** 9. remove import functions */
+// import { getAddIdea, postAddIdea, getIdeas, 
+//         deleteIdea, getEditIdea, putEditIdea } 
+// from "./controllers/ideasController.js";
+/** end of 9. */
 
-/** 7. delete import Idea */
-// import Idea from "./models/Ideas.js"
-/** end of 7. */
-
+/** 10. */
+// import ideasRoute 
+import ideasRoute from "./routes/ideasRoute.js";
+/** end of 10. */
 
 const app = express();
 
@@ -56,21 +56,20 @@ app.get("/about", (req, res) => {
   res.render("about");
 });
 
+/** 11. */
 
-app.get("/ideas/add", getAddIdea);
+/** 4. */
+// app.get("/ideas/add", getAddIdea);
+// app.post("/ideas/add", postAddIdea);
+// app.get("/ideas", getIdeas);
+// app.delete("/ideas/:id", deleteIdea);
+// app.get("/ideas/edit/(:id)", getEditIdea);
+// app.put("/ideas/edit/:id", putEditIdea);
+/** end of 4. */
 
-app.post("/ideas/add", postAddIdea);
+app.use("/ideas", ideasRoute);
+/** end of 11. */
 
-app.get("/ideas", getIdeas);
-
-app.delete("/ideas/:id", deleteIdea);
-
-// to get the page for editing "edit.handlebars"
-// (:id) is the same as :id
-app.get("/ideas/edit/(:id)", getEditIdea);
-
-// to process the changed data of the idea from "edit.handlebars"
-app.put("/ideas/edit/:id", putEditIdea);
 
 
 // when the route is not handled by the routes above, then finally handle by route "404"

@@ -1,26 +1,40 @@
-========== MVC architectural pattern ==========
-    M : models
-    V : views
-    C : controllers
+========== separate the routes ==========
 
-Separate the codes into MVC architectural pattern 
+1. create folder 'routes' under folder 'IdeaNotes'
 
+2. inside folder 'routes': create 'ideasRoute.js'  
 
-After extracting functions from routes 
+3. import express  in 'ideasRoute.js'
 
-1. create folder 'controllers' under folder 'IdeaNotes'
+4. move the routes related to ideas  to 'ideasRoute.js'
+    "/ideas/add"
+    "/ideas"
+    "/ideas/:id"
+    "/ideas/edit/(:id)"
 
-2. inside folder 'controllers': create 'ideasController.js'
+5. import functions from 'ideasController.js'  in 'ideasRoute.js'
+    beware of the file path when import 
 
-3. move the extracted functions from 'app.js' to 'ideasController.js' 
+6. use express.Router() in 'ideasRoute.js'
+    const router = express.Router();
+    change all 'app' to 'router'
 
-4. import Idea model in 'ideasController.js'
+7. modify the routes   
+    "/ideas/add"         --> "/add"
+    "/ideas"             --> "/"
+    "/ideas/:id"         --> "/:id"
+    "/ideas/edit/(:id)"  --> "/edit/:id"
 
-5. add export in front of each function in 'ideasController.js' 
+8. export default router;  // in 'ideasRoute.js'
 
-6. import the functions from 'ideasController.js' to 'app.js'
+9. in 'app.js': 
+    remove the import functions from 'ideasController.js'
 
-7. remove import Idea in 'app.js' because 'app.js' does not need to call Idea model
+10. in 'app.js', add codes:
+    import ideasRoute from "./routes/ideasRoute.js"
+    
+11. in 'app.js', add code: 
+        app.use("/ideas", ideasRoute);  // before app.use("*")
 
-8. check whether the function still works properly after moving and importing functions. 
+12. check whether the application works properly
 

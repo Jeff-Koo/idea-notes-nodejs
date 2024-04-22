@@ -1,8 +1,5 @@
-/** 4. */
 import Idea from "../models/Ideas.js";
-/** end of 4. */
 
-/** 5. */
 export const getAddIdea = (req, res) => {
   res.render("ideas/add"); // follow file structure, start from 'views' folder
 };
@@ -91,5 +88,3 @@ export const putEditIdea = (req, res) => {
     });
   });
 };
-
-/** end of 5. */
