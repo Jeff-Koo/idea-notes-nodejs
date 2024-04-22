@@ -1,67 +1,25 @@
-========== make navbar with login / logout version ==========
+========== Separate codes of 'usersRoute.js' into MVC ==========
 
-    always show the 'Home' button and 'About' button
+1. extract functions from the routes in 'usersRoute.js'
 
-    if user is logged in
-        show 'Add Notes' button
-        show 'Notes' button
-        show Logout' button
-    else
-        show 'Login' button
-        show 'register' button 
+2. in folder 'controllers':
+    create 'usersController.js'
 
+3. move the functions from 'usersRoute.js' to 'usersController.js'
 
-in '_navbar.handlebars':
+4. add 'export' in front of each function in 'usersController.js'
 
-1. move the dropdown menu ('Notes' and 'Add Notes') inside <ul class="navbar-nav ml-auto">
-    to be a part of the rightmost of the navbar
+5. import the neccessary modules, packages in 'usersController.js'
+    import bcrypt from "bcryptjs";
+    import passport from "passport";
+    import User from "../models/Users.js";
 
-2. rearrange the order of the buttons, the order as follows: 
-    
-    <li class="nav-item dropdown"><a> Note </a>
-        <div>
-            <a> Notes </a>
-            <a> Add Notes </a>
-        </div> 
-    </li>
-    <li> <a> Logout </a> </li>
+6. remove the unused modules, packages in 'usersRoute.js'
+    - bcryptjs
+    - passport
+    - Users.js
 
-    <li> <a> Login </a> </li>
-    <li> <a> Register </a> </li>
+7. import functions from 'usersController.js' in 'usersRoute.js'
 
-3. set condition to check whether the user is logged in with Built-in Helper in handlebars
-    {{#if }}
-    
-    <li class="nav-item dropdown"><a> Note </a>
-        <div>
-            <a> Notes </a>
-            <a> Add Notes </a>
-        </div> 
-    </li>
-    <li> <a> Logout </a> </li>
+8. check whether the function still works properly after moving and importing functions. 
 
-    {{else}}
-    
-    <li> <a> Login </a> </li>
-    <li> <a> Register </a> </li>
-    
-    {{/if}}
-
-
-
-
-~. Extra on 'user' in handlebars 
-
-    <div>
-        Show 'user' detail in handlebars: 
-        {{#each user}}
-            {{@key}}: { 
-                {{#each this}}
-                    {{@key}} : {{this}} , 
-                {{/each}}
-            }
-            <br />
-        {{/each}} 
-    </div>
-
-    therefore, {{user._doc.email}} is the variable to show email of user in '*.handlebars', 
