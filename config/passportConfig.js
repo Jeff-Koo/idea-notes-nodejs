@@ -60,7 +60,7 @@ export default function (passport) {
         })
     );
 
-    /** 3. */
+
     // for session and maintain cookies in server 
     passport.serializeUser(function (user, done) {
         // only store the id of the user in login session
@@ -73,5 +73,4 @@ export default function (passport) {
             done(err, user);
         });
     });
-    /** end of 3. */
 }

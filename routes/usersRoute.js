@@ -98,15 +98,18 @@ router.post("/login", (req, res, next) => {
         successRedirect : "/ideas",
         failureRedirect : "/users/login",
         failureFlash : true,                    // turn on flash, to make fail_passport message
-
-        /** 1. remove  session:false  */
-        // session: false,
-        /** end of 1. */
-
     })(req, res, next);                         // IIFE 
 });
 
-
+/** 2. */
+router.get("/logout", (req, res) => {
+    req.logout( (err) => {
+        if (err) throw err; 
+    });
+    req.flash("success_msg", "You're logged out!");
+    res.redirect("/users/login")
+});
+/** end of 2. */
 
 
 export default router;

@@ -63,12 +63,10 @@ app.use(
 app.use(flash());
 
 
-/** 2. */
 // passport middlware must go after express-session initial
 // there is serialize session within the passport
 app.use(passport.initialize());
 app.use(passport.session());    // set up for login session
-/** end of 2. */
 
 
 app.use(function(req, res, next) {
@@ -79,15 +77,13 @@ app.use(function(req, res, next) {
   // res.locals.fail_passport    refers to {{fail_passport}} in '_error.handlebars'
   // req.flash("fail_passport")  refers to {type:"fail_passport"} in 'passportConfig.js'
 
-  /** 4. */
   // create global variable "res.locals.user" to passing through all the modules
   // "req.user" will be set by deserializeUser() in 'passportConfig.js' after user login successfully
   // if there is "req.user" exists, then assign to "res.locals.user", else set null as no user
   res.locals.user = req.user || null;
 
   // add a line to check whether the login session works properly
-  console.log("===== LOGIN USER =====", res.locals.user); 
-  /** end of 4. */
+  // console.log("===== LOGIN USER =====", res.locals.user); 
 
   next();
 })
