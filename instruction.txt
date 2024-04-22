@@ -1,33 +1,28 @@
-========== more partials for displaying messages ==========
+========== making flash messages for edit notes ==========
 
-1. inside folder 'views/partials': 
-    create '_error.handlebars'
+1. in 'ideasController.js'
+    check errors when edit the notes 
+    edit codes in putEditIdea()
+        "title" cannot be empty
+        "details" cannot be empty
 
-2. add {{> _error}} in 'main.handlebars'
-
-3. remove the error message part in 'add.handlebars'
-
-4. inside folder 'views/partials': create '_msg.handlebars'
-
-5. add {{> _msg}} in 'main.handlebars'
-
-
-========== making flash messages ==========
-
-6. in 'app.js':
-    import flash from "connect-flash";     (npm install connect-flash)
-    import session from "express-session"; (npm install express-session)
-
-7. in 'app.js':
-    set up express-session 
-    set up flash
-    store 'success_msg' 'error_msg' in 'res.locals' of the express-session
-
-8. call flash message in functions of 'ideasController.js'
-   add  req.flash("xxx_msg", "sth")  before  res.redirect()  
-      postAddIdea()
-      putEditIdea()
-      deleteIdea()
+2. check empty before update value 
       
-9. check whether the message shows up when AddIdea, EditIdea, DeleteIdea
+      set a string to store the error message
 
+      if the string for error message is not empty
+         error occurs, 
+         show message, 
+         redirect to edit page
+      else 
+         update value, 
+         save to database, 
+         show success message, 
+         redirect to idea page
+   
+
+3. remove 'required' attribute of the <input> and <textarea> in 'edit.handlebars'
+
+4. check if the error message shows 
+   when the fields are empty when editing the note 
+   

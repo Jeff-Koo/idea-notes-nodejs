@@ -2,11 +2,9 @@ import express from "express";              // require --> import (ES6) : change
 import { engine } from "express-handlebars";
 import morgan from "morgan";
 
-/** 6. */
 // import flash & express-session
 import flash from "connect-flash";
 import session from "express-session";
-/** end of 6. */
 
 // load body-parsoer
 import bodyParser from "body-parser";
@@ -44,7 +42,6 @@ app.use(bodyParser.json());        // parse application/json (support JSON-encod
 // put methodOverride middleware with "_method" 
 app.use(methodOverride("_method"));
 
-/** 7. */
 // set up an express-session
 app.use(
   session({
@@ -63,7 +60,6 @@ app.use(function(req, res, next) {
   res.locals.error_msg = req.flash("error_msg");
   next();
 })
-/** end of 7. */
 
 
 app.get("/", (req, res) => {

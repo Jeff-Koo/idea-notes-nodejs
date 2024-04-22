@@ -22,15 +22,11 @@
     <!-- put a container for body, format the content better -->
     <div class="container">
         
-        <!-- 2. -->
         <!-- add error message part before body (used when render page) -->
         {{> _error}}
-        <!-- end of 2. -->
 
-        <!-- 5. -->
         <!-- add msg part before body (used by req.flash()) -->
         {{> _msg}} 
-        <!-- end of 5. -->
         
         <!-- add the following line, must be 3 brackets -->
         {{{body}}}

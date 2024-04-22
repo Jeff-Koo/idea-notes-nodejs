@@ -33,9 +33,7 @@ export const postAddIdea = (req, res) => {
       details: req.body.details,
     };
     new Idea(newUser).save().then(() => {
-      /** 8. */
       req.flash("success_msg", "Note Added!");
-      /** end of 8. */
       res.redirect("/ideas"); // redirect refers to the route defined : app.get('xxx')
     });
   }
@@ -58,24 +56,22 @@ export const deleteIdea = (req, res) => {
   // :id is a parameter refers to the ObjectID in URL
   console.log(req.params);
   Idea.deleteOne({ _id: req.params.id }).then(() => {
-    /** 8. */
     req.flash("error_msg", "Note Deleted!")
-    /** end of 8. */
     res.redirect("/ideas");
   });
 };
 
 export const getEditIdea = (req, res) => {
   Idea.findOne({
-    // use findOne to return only 1 object with ID
-    _id: req.params.id,
+  // use findOne to return only 1 object with ID
+  _id: req.params.id,
   })
-    .lean()
-    .then((ideaDB) => {
-      res.render("ideas/edit", {
-        idea: ideaDB, // idea (refer to edit.handlebars) : ideaDB (document from DB)
-      });
+  .lean()
+  .then((ideaDB) => {
+    res.render("ideas/edit", {
+      idea: ideaDB, // idea (refer to edit.handlebars) : ideaDB (document from DB)
     });
+  });
 };
 
 export const putEditIdea = (req, res) => {
@@ -83,16 +79,40 @@ export const putEditIdea = (req, res) => {
     // use findOne to return only 1 object with ID
     _id: req.params.id,
   }).then((ideaDB) => {
-    // updating value
-    ideaDB.title = req.body.title;
-    ideaDB.details = req.body.details;
 
-    // save updated ideaDB to mongoDB
-    ideaDB.save().then(() => {
-      /** 8. */
-      req.flash("success_msg", "Note Updated!");
-      /** end of 8. */
-      res.redirect("/ideas");
-    });
+    /** 1. */
+    // req.flash only handle a string, so we do not use array here
+    let edit_error_msg = "";
+    if (!req.body.title) {
+      edit_error_msg += "Please add a title. ";
+    }
+    if (!req.body.details) {
+      edit_error_msg += "Please add some details. "
+    }
+    /** end of 1. */
+    
+    /** 2. */
+    // use if-else statement, place update value in else part 
+    if (edit_error_msg) {
+      // if there is errors, edit_error_msg is not empty
+      req.flash("error_msg", edit_error_msg);
+
+      // redirect to route "/ideas/edit/:id"
+      res.redirect("/ideas/edit/"+ideaDB._id);
+
+    } else {
+
+      // updating value
+      ideaDB.title = req.body.title;
+      ideaDB.details = req.body.details;
+  
+      // save updated ideaDB to mongoDB
+      ideaDB.save().then(() => {
+        req.flash("success_msg", "Note Updated!");
+        res.redirect("/ideas");
+      });
+    }
+    /** end of 2. */
+
   });
 };

@@ -8,15 +8,15 @@
         <input type="hidden" name="_method" value="PUT" />
         <div class="form-group">
             <label for="title">Title</label>
-            <input type="text" class="form-control" name="title" value="{{idea.title}}" required />
+            <input type="text" class="form-control" name="title" value="{{idea.title}}" />
             <!-- value as part of the input attribute -->
-            <!-- input cannot be empty, need required attribute -->
+            <!-- empty input handled in 'ideasController.js', required attribute removed -->
         </div>
         <div class="form-group">
             <label for="details">Details</label>
-            <textarea name="details" class="form-control" required >{{idea.details}}</textarea>
+            <textarea name="details" class="form-control" >{{idea.details}}</textarea>
             <!-- variable as text content -->
-            <!-- input cannot be empty, need required attribute -->
+            <!-- empty input handled in 'ideasController.js', required attribute removed -->
         </div>
         <button type="submit" class="btn btn-primary">submit</button>
     </form>
