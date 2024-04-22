@@ -1,42 +1,20 @@
-=========== handle valid input data in register (continue) ===========
+========== set up session after login ==========
 
-1. in 'usersRoute.js': 
-    check whether the email is already registered. (in route.post("/register"))
-    find the input email in mongoDB
+1. in 'usersRoute.js' : router.post("/login") : 
+    remove "session: false" (session will be set true by default)
 
-========== set up Login function ==========
+2. set up middleware for passport and login session 
+    in 'app.js' (after the express-session middleware):
+        app.use(passport.initialize());
+        app.use(passport.session());
 
-2.  npm i passport
-    npm i passport-local
+3. in 'passportConfig.js':
+    add passport.serializeUser()
+    add passport.deserializeUser()
 
-3. create folder 'config' under 'IdeaNotes'
-
-4. inside folder 'config':
-    create 'passportConfig.js'
-
-5. inside 'app.js': 
-    // load passport 
-    import passport from "passport";
-    import passportConfig from "./config/passportConfig.js";
-    passportConfig(passport);
-
-6. write routes in 'usersRoute.js' for "/login"
-    (together with the functions, we will extract the function later)
-    remember to import passport in 'usersRoute.js'
-    
-7. check whether the code works properly
-    if login successful, the page will redirect to "/ideas" 
-    if login failed, the page remain at "/users/login" with empty input field 
-
-
-========== display failure message when login failed ==========
-
-8. add some lines in '_error.handlebars'
-    to handle "fail_passport" message from 'passportConfig.js'
-
-9. in 'app.js':
-    add  res.locals.fail_passport = req.flash("fail_passport");
+4. in 'app.js' (set global variable):
+    res.locals.user = req.user || null;
 
 
 ~. Read more to get better understanding : 
-    https://medium.com/tds-note/how-failure-message-works-in-passport-js-512e453af8a3
+    https://medium.com/%E9%BA%A5%E5%85%8B%E7%9A%84%E5%8D%8A%E8%B7%AF%E5%87%BA%E5%AE%B6%E7%AD%86%E8%A8%98/%E7%AD%86%E8%A8%98-%E9%80%8F%E9%81%8E-passport-js-%E5%AF%A6%E4%BD%9C%E9%A9%97%E8%AD%89%E6%A9%9F%E5%88%B6-11cf478f421e

@@ -7,7 +7,7 @@ import User from "./../models/Users.js"
 
 export default function (passport) {
     passport.use( new LocalStrategy( 
-        { usernameField : "emailInput", passwordField: "passwordInput" },   // "emailInput" refers to <input> in 'login.handlebars'
+        { usernameField : "emailInput", passwordField: "passwordInput" },       // "emailInput" refers to <input> in 'login.handlebars'
         function (emailInput, passwordInput, done)  {
             // console.log("passportConfig.js: ", emailInput, passwordInput);    // if this part is working, then this line should output the variable on console
             // Match user based on email
@@ -60,7 +60,18 @@ export default function (passport) {
         })
     );
 
-
-    /** later will add codes for session and maintain cookies in server */
-
+    /** 3. */
+    // for session and maintain cookies in server 
+    passport.serializeUser(function (user, done) {
+        // only store the id of the user in login session
+        done(null, user.id);
+    });
+    
+    passport.deserializeUser(function (id, done) {
+        // find the user information in mongoDB with the id in login session
+        User.findById(id, function (err, user) {
+            done(err, user);
+        });
+    });
+    /** end of 3. */
 }

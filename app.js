@@ -28,12 +28,10 @@ import ideasRoute from "./routes/ideasRoute.js";
 // import usersRoute 
 import usersRoute from "./routes/usersRoute.js";
 
-/** 5. */
 // load passport 
 import passport from "passport";
 import passportConfig from "./config/passportConfig.js";
 passportConfig(passport);
-/** end of 5. */
 
 const app = express();
 
@@ -64,15 +62,32 @@ app.use(
 // therefore the setup of express-session is needed   
 app.use(flash());
 
+
+/** 2. */
+// passport middlware must go after express-session initial
+// there is serialize session within the passport
+app.use(passport.initialize());
+app.use(passport.session());    // set up for login session
+/** end of 2. */
+
+
 app.use(function(req, res, next) {
   res.locals.success_msg = req.flash("success_msg");
   res.locals.error_msg = req.flash("error_msg");
 
-  /** 9. */
   res.locals.fail_passport = req.flash("fail_passport");
   // res.locals.fail_passport    refers to {{fail_passport}} in '_error.handlebars'
   // req.flash("fail_passport")  refers to {type:"fail_passport"} in 'passportConfig.js'
-  /** end of 9. */
+
+  /** 4. */
+  // create global variable "res.locals.user" to passing through all the modules
+  // "req.user" will be set by deserializeUser() in 'passportConfig.js' after user login successfully
+  // if there is "req.user" exists, then assign to "res.locals.user", else set null as no user
+  res.locals.user = req.user || null;
+
+  // add a line to check whether the login session works properly
+  console.log("===== LOGIN USER =====", res.locals.user); 
+  /** end of 4. */
 
   next();
 })

@@ -41,8 +41,6 @@ router.post("/register", (req, res) => {
             password2 : req.body.password2,
         })
     } else {
-
-        /** 1. */
         // check whether the email is already registered
         // find the input email in mongoDB
         User.findOne({email: req.body.email}).then( (user) => {
@@ -53,7 +51,6 @@ router.post("/register", (req, res) => {
                 res.redirect("/users/register");
             }
         });
-        /** end of 1. */
         
         // if input ok, then register the user, save data in mongoDB (in the next Step)
         // make a variable 'newUser' which is 'User' type 
@@ -92,24 +89,23 @@ router.post("/register", (req, res) => {
     }
 });
 
-/** 6. */
 router.get("/login", (req, res) => {
     res.render("users/login");
 });
-
 
 router.post("/login", (req, res, next) => {
     passport.authenticate("local", {            // local follow  {Strategy as LocalStrategy} from "passport-local" 
         successRedirect : "/ideas",
         failureRedirect : "/users/login",
         failureFlash : true,                    // turn on flash, to make fail_passport message
-        
-        // set session : false for now, will be removed later
-        session: false,
-        
+
+        /** 1. remove  session:false  */
+        // session: false,
+        /** end of 1. */
+
     })(req, res, next);                         // IIFE 
 });
-/** end of 6. */
+
 
 
 
