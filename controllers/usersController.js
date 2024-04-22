@@ -1,14 +1,10 @@
 import bcrypt from "bcryptjs";
 import passport from "passport";
-
-/** 5. import necessary packages */
 import multer from "multer";
 import * as fs from "fs";
-/** end of 5. */
 
 import User from "../models/Users.js";
 
-/** 6. */
 const storageSetting = multer.diskStorage({
     destination : (req, file, cb) => {
         cb(null, "./uploads");
@@ -17,10 +13,8 @@ const storageSetting = multer.diskStorage({
         cb(null, file.originalname);
     },
 });
-/** end of 6. */
 
-/** 7. */
-// "avatarUpload" refers to <input> in 'profile.handlebars'
+
 export const uploadAvatar = multer({ 
     storage: storageSetting,
     fileFilter : (req, file, cb) => {
@@ -34,20 +28,17 @@ export const uploadAvatar = multer({
             // only accept jpeg, jpg, png, gif
             cb(null, true);
         } else {
-            // not allow other file types
+            // not allow other file types 
             // flash an error message to user 
             req.flash("error_msg", "Wrong file type for avatar! ");
             cb(null, false);
         }
     }
 }).single("avatarUpload");  // "avatarUpload" refers to <input> in 'profile.handlebars'
-/** end of 7. */
 
 
-/** 3. */
 export const postProfile = (req, res) => {
     
-    /** 8. */
     // use findOne to return only 1 object 
     User.findOne({ _id : res.locals.user._id })
     .then( (user) => {
@@ -64,22 +55,39 @@ export const postProfile = (req, res) => {
     
             user.avatar.data = avatarData;
             user.avatar.contentType = avatarContentType;
-    
+
+            /** 6. */
+            // after getting the data of the image file, 
+            // delete the temporate file in folder 'uploads'
+            fs.unlink(req.file.path, (err) => {
+                if (err) throw err;
+            });
+            /** end of 6. */
+
             user.save().then( ()=> {
                 req.flash("success_msg", "avatar uploaded!")
                 res.redirect("/users/profile")
             });
         } else {
             // in case there is no file, but clicked the 'Upload Avatar' button
-            req.flash("error_msg", "Choose a Correct File before clicking 'Upload Avatar' button")
+            req.flash("error_msg", "Choose a Correct File before clicking 'Upload Avatar' button!")
             res.redirect("/users/profile");
         }
     });
-    /** end of 8. */
     
-    // res.redirect("/users/profile")
 };
-/** end of 3. */
+
+/** 5. */
+export const deleteProfile = (req, res) => {
+    User.updateOne(
+        { _id : res.locals.user._id },
+        { $unset: { avatar : "" } }
+    ).then( ()=> {
+        req.flash("success_msg", "Delete Avatar Successfully!");
+        res.redirect("/users/profile")
+    });
+};
+/** end of 5. */
 
 
 
@@ -187,6 +195,9 @@ export const getProfile = (req, res) => {
     res.render("users/profile", { 
         name : res.locals.user.name,
         email : res.locals.user.email,
+        /** 2.  */
+        avatar : res.locals.user.avatar,
+        /** end of 2.  */
     });
 };
 

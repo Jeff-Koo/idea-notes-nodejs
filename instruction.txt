@@ -1,48 +1,47 @@
-========== upload image by using multer ==========
+========== display avatar on 'Profile' page ==========
 
-1. npm install multer
+1. in 'profile.handlebars': 
+    use {{#if }} to check whether the current login user has avatar to show
+        use add <img> to display avatar (if there is avatar)
+        show message of "No Avatar" (if there is no avatar)
 
-2. write post route in 'usersRoute.js' for "/profile":
-    router.post("/profile", postProfile);
-    remember to import { postProfile } from "../controllers/usersController.js"
-
-3. write the function postProfile in 'usersController.js':
-    export const postProfile = (req, res) => { 
-        res.redirect("/users/profile") 
-    };
-    // for now simply redirect to profile page after clicking the 'Upload Avatar' button
-
-4. create folder 'uploads' in folder 'IdeaNotes'
+2. in 'usersController.js':  getProfile(): 
+    add { avatar : res.locals.user.avatar } when render 'profile.handlebars' 
 
 
-===== inside 'usersController.js' do the following steps: ===== 
+========== create a button to delete avatar ==========
 
-5. import necessary packages: 
-    import multer from "multer"
-    import * as fs from "fs";
+3. in 'profile.handlebars': 
+    make a form with the 'Delete Avatar' button
 
-6. make the setting of storage in multer
-    - set destination   (which folder the input file put into temporarily)
-    - set filename      (what name should the input file be in the backend server)
+4. write delete route in 'usersRoute.js' for "/profile":
+    router.delete("/profile", deleteProfile);
+    remember to import { deleteProfile } from "../controllers/usersController.js"
+
+5. write the function deleteProfile in 'usersController.js':
+    export const deleteProfile = (req, res) => { ... };
    
-7. create function for uploading image with multer:
-    export const uploadAvatar = multer({ 
-        storage: storageSetting,
-        fileFilter : (req, res) => { /* set filter: what type of file can be uploaded) */  }   
-    }).single("avatarUpload");
 
-8. in 'usersController.js':  postProfile() :
-    write codes to store the data of image to mongoDB
-    remove  res.redirect("/users/profile")  
+========== delete the temporary files when upload avatar ==========
+    upload avatar for multiple times, you will see there are multiple files in folder 'uploads'
+    but the file in 'uploads' is only the temporary files, since the image has been stored in mongoDB
 
+6. delete the temporary file in folder 'uploads' while storing the image into mongoDB
+    in 'usersController.js':  postProfile() :
+        fs.unlink();
 
-===== modify post route in 'usersRoute.js' =====
+    after clearing the folder 'uploads', the folder 'uploads' should keep empty even uploading avatar
 
-9.  import uploadAvatar from "../controllers/usersController.js"
-    router.post("/profile", uploadAvatar, postProfile);
+7. remeber to protect the route 'profile', only user logged in can view this page
+    in 'usersRoute.js': 
+        import ensureAuthenticated from "../helpers/auth.js";
+        add ensureAuthenticated to the following routes:
+            get "/profile"      --> router.get("/profile", ensureAuthenticated, getProfile);
+            post "/profile"
+            delete "/profile"
 
-10. check mongoDB to see whether the image is uploaded and saved in mongoDB
-    if uploaded successfully, 
-        inside collection 'users', the document of the user will have the field 'avatar' Object,
-        which contains 'data' and 'contentType'
+8. check whether the functions work properly 
 
+=========================================
+========== END of the Template ==========
+=========================================

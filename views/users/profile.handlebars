@@ -3,7 +3,25 @@
     <p><b>Your Email: </b> {{email}}</p>
 
     <p><b>Your Avatar: </b>
-        <!-- will show avatar here later -->
+        <!-- 1. -->
+        <!-- display the avatar of user with <img> and set the size: width="50" height="50" -->
+        {{#if avatar.data}}
+        <img src=" data:image/{{avatar.contentType}}; base64, {{avatar.data}}" width="50" height="50">
+        
+        <!-- 3. -->
+        <!-- make a form with the 'Delete Avatar' button, with the route '/users/profile'-->
+        <form action="/users/profile?_method=DELETE" method="post">
+            <!-- use the method 'delete' ->  router.delete("/profile")  in 'usersRoute.js' -->
+            <input type="hidden" name="_method" value="DELETE" />
+            <input type="submit" class="btn btn-danger btn-block" value="Delete Avatar" />
+        </form>
+        <!-- end of 3. -->
+
+        {{else}}
+        No Avatar now.
+        
+        {{/if}}
+        <!-- end of 1. -->
     </p>
     <br />
 

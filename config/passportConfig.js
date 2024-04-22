@@ -13,6 +13,7 @@ export default function (passport) {
             // Match user based on email
             User.findOne({
                 email : emailInput,
+                
             }).then( (user) => {
                 if (!user) {
                     // in case cannot find user in MongoDB

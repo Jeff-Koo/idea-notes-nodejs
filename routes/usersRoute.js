@@ -1,8 +1,12 @@
 import express from "express";
 
 import { getRegister, postRegister, getLogin, postLogin, getLogout, 
-    getProfile, postProfile, uploadAvatar} 
+    getProfile, postProfile, uploadAvatar, deleteProfile} 
 from "../controllers/usersController.js";
+
+/** 7. */
+import ensureAuthenticated from "../helpers/auth.js";
+/** end of 7. */
 
 const router = express.Router();
 
@@ -20,16 +24,18 @@ router.route("/login").get(getLogin).post(postLogin);
 // router.get("/logout", getLogout);
 router.route("/logout").get(getLogout);
 
-router.get("/profile", getProfile);
 
-/** 2. */
-// router.post("/profile", postProfile);
-/** end of 2. */
+/** 7. */
+router.get("/profile", ensureAuthenticated, getProfile);
 
+router.post("/profile", ensureAuthenticated, uploadAvatar, postProfile);
 
-/** 9. */
-router.post("/profile", uploadAvatar, postProfile);
-/** end of 9. */
+router.delete("/profile", ensureAuthenticated, deleteProfile);
 
+/** 4. */
+// router.delete("/profile", deleteProfile);
+/** end of 4. */
+
+/** end of 7. */
 
 export default router;
