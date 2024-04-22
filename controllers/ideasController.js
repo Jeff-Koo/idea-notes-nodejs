@@ -115,3 +115,42 @@ export const putEditIdea = (req, res) => {
 
   });
 };
+
+
+/** 4. */
+// write the function for getting data from mongoDB 
+//                        and rendering 'records.handlebars'
+export const getRecords = (req, res) => {
+
+  // use $lookup in aggregate to link two collections, to get the author name
+  Idea.aggregate([
+      { $lookup :
+          // show the data  where  users._id === ideas.userID
+          {
+              from: "users",          // link to 'users' collection in mongoDB
+              localField: "userID",   // 'userID' is the field in 'ideas'
+              foreignField: "_id",    // '_id' is the field in 'users'
+              as: "userInfo",
+              // put the information from 'users' collection to the field called 'userInfo'
+          }
+      },
+      { $unwind : 
+          {
+              path: "$userInfo",                    // "$" is needed
+              preserveNullAndEmptyArrays: true,     // in case there is a note and its author's account is deleted.  
+          }
+      }, 
+      { $sort : 
+          {
+              "date" : -1,            // date in descending order (notes sorted from new to old)
+          }
+      }
+  ])
+  .then( (recordsDB) => {
+      // console.log(recordsDB[0].userInfo.name);
+      res.render("ideas/records", {records : recordsDB});
+      // records --> 'ideas/index.handlebars'(records) : recordsDB --> array of document objects from mongoDB
+  })
+};
+/** end of 4. */
+

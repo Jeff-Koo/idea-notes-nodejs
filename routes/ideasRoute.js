@@ -1,7 +1,7 @@
 import express from "express";
 
 import { getAddIdea, postAddIdea, getIdeas, 
-    deleteIdea, getEditIdea, putEditIdea } 
+    deleteIdea, getEditIdea, putEditIdea, getRecords } 
 from "../controllers/ideasController.js";
 
 
@@ -36,5 +36,13 @@ router.route("/:id").delete(deleteIdea);
 // router.put("/edit/:id", putEditIdea);
 
 router.route("/edit/:id").get(getEditIdea).put(putEditIdea);
+
+
+
+/** 3.  */
+// write a route for calling getRecords() function in 'ideasController.js'
+// remember to import { getRecords } from "../controllers/ideasController.js";
+router.get("/records", getRecords);
+/** end of 3. */
 
 export default router;

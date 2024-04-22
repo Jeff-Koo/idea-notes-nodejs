@@ -12,12 +12,10 @@ import bodyParser from "body-parser";
 // load method-override
 import methodOverride from "method-override";
 
-/** 4. */
 import dotenv from "dotenv";
 dotenv.config();
 // console.log(process.env.PORT);     // get the PORT value from '.env' file
 // console.log(process.env.mongoURI); // get the mongoURI value from '.env' file
-/** end of 4. */
 
 
 // load mongoose
@@ -26,7 +24,7 @@ import mongoose from "mongoose";
 // it is a Promise Object so set the response and catch (cuz db out of program control, can't tell when data come back)
 // database connection is done
 mongoose
-  .connect(process.env.mongoURI)  /** 5. */
+  .connect(process.env.mongoURI)
   .then(  () => console.log("Mongodb connected.........") )
   .catch( (err) => console.log(err) );
 
@@ -65,13 +63,9 @@ app.use(
       secret: "anything",
       resave: true,
       saveUninitialized: true,
-      
-      /** 1. */
       cookie: {
-        maxAge: 30 * 1000      // 30 seconds
+        maxAge: 20 * 60 * 1000      // 20 minutes
       }
-      /** end of 1. */
-
   })
 );
 
@@ -132,11 +126,9 @@ app.use("*", (req, res) => {        // match every path, always be the last rout
 });
 
 
-/** 5. */
 // in case there is no PORT variable in .env, 
 // then user 3200 as the port number
 const PORT = process.env.PORT || 3200;
-/** end of 5. */
 
 app.listen(PORT, () => {
   console.log(`Server started on port ${PORT}`);
