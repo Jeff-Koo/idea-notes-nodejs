@@ -1,40 +1,33 @@
-========== separate the routes ==========
+========== more partials for displaying messages ==========
 
-1. create folder 'routes' under folder 'IdeaNotes'
+1. inside folder 'views/partials': 
+    create '_error.handlebars'
 
-2. inside folder 'routes': create 'ideasRoute.js'  
+2. add {{> _error}} in 'main.handlebars'
 
-3. import express  in 'ideasRoute.js'
+3. remove the error message part in 'add.handlebars'
 
-4. move the routes related to ideas  to 'ideasRoute.js'
-    "/ideas/add"
-    "/ideas"
-    "/ideas/:id"
-    "/ideas/edit/(:id)"
+4. inside folder 'views/partials': create '_msg.handlebars'
 
-5. import functions from 'ideasController.js'  in 'ideasRoute.js'
-    beware of the file path when import 
+5. add {{> _msg}} in 'main.handlebars'
 
-6. use express.Router() in 'ideasRoute.js'
-    const router = express.Router();
-    change all 'app' to 'router'
 
-7. modify the routes   
-    "/ideas/add"         --> "/add"
-    "/ideas"             --> "/"
-    "/ideas/:id"         --> "/:id"
-    "/ideas/edit/(:id)"  --> "/edit/:id"
+========== making flash messages ==========
 
-8. export default router;  // in 'ideasRoute.js'
+6. in 'app.js':
+    import flash from "connect-flash";     (npm install connect-flash)
+    import session from "express-session"; (npm install express-session)
 
-9. in 'app.js': 
-    remove the import functions from 'ideasController.js'
+7. in 'app.js':
+    set up express-session 
+    set up flash
+    store 'success_msg' 'error_msg' in 'res.locals' of the express-session
 
-10. in 'app.js', add codes:
-    import ideasRoute from "./routes/ideasRoute.js"
-    
-11. in 'app.js', add code: 
-        app.use("/ideas", ideasRoute);  // before app.use("*")
-
-12. check whether the application works properly
+8. call flash message in functions of 'ideasController.js'
+   add  req.flash("xxx_msg", "sth")  before  res.redirect()  
+      postAddIdea()
+      putEditIdea()
+      deleteIdea()
+      
+9. check whether the message shows up when AddIdea, EditIdea, DeleteIdea
 

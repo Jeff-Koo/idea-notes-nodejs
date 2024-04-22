@@ -33,7 +33,9 @@ export const postAddIdea = (req, res) => {
       details: req.body.details,
     };
     new Idea(newUser).save().then(() => {
-      // this is a Promise Object
+      /** 8. */
+      req.flash("success_msg", "Note Added!");
+      /** end of 8. */
       res.redirect("/ideas"); // redirect refers to the route defined : app.get('xxx')
     });
   }
@@ -56,6 +58,9 @@ export const deleteIdea = (req, res) => {
   // :id is a parameter refers to the ObjectID in URL
   console.log(req.params);
   Idea.deleteOne({ _id: req.params.id }).then(() => {
+    /** 8. */
+    req.flash("error_msg", "Note Deleted!")
+    /** end of 8. */
     res.redirect("/ideas");
   });
 };
@@ -84,6 +89,9 @@ export const putEditIdea = (req, res) => {
 
     // save updated ideaDB to mongoDB
     ideaDB.save().then(() => {
+      /** 8. */
+      req.flash("success_msg", "Note Updated!");
+      /** end of 8. */
       res.redirect("/ideas");
     });
   });

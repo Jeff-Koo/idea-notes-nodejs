@@ -2,6 +2,11 @@ import express from "express";              // require --> import (ES6) : change
 import { engine } from "express-handlebars";
 import morgan from "morgan";
 
+/** 6. */
+// import flash & express-session
+import flash from "connect-flash";
+import session from "express-session";
+/** end of 6. */
 
 // load body-parsoer
 import bodyParser from "body-parser";
@@ -20,19 +25,11 @@ mongoose
   .catch( (err) => console.log(err) );
 
 
-/** 9. remove import functions */
-// import { getAddIdea, postAddIdea, getIdeas, 
-//         deleteIdea, getEditIdea, putEditIdea } 
-// from "./controllers/ideasController.js";
-/** end of 9. */
-
-/** 10. */
 // import ideasRoute 
 import ideasRoute from "./routes/ideasRoute.js";
-/** end of 10. */
+
 
 const app = express();
-
 
 // setup handlebars middleware
 app.engine("handlebars", engine());     // must first
@@ -47,6 +44,28 @@ app.use(bodyParser.json());        // parse application/json (support JSON-encod
 // put methodOverride middleware with "_method" 
 app.use(methodOverride("_method"));
 
+/** 7. */
+// set up an express-session
+app.use(
+  session({
+      secret: "anything",
+      resave: true,
+      saveUninitialized: true,
+  })
+);
+
+// connect-flash store flash messages in session, 
+// therefore the setup of express-session is needed   
+app.use(flash());
+
+app.use(function(req, res, next) {
+  res.locals.success_msg = req.flash("success_msg");
+  res.locals.error_msg = req.flash("error_msg");
+  next();
+})
+/** end of 7. */
+
+
 app.get("/", (req, res) => {
   res.render("index",           // send --> render (ES6) : change package.json "type": "module"
         {title: "Welcome"}); 
@@ -56,19 +75,7 @@ app.get("/about", (req, res) => {
   res.render("about");
 });
 
-/** 11. */
-
-/** 4. */
-// app.get("/ideas/add", getAddIdea);
-// app.post("/ideas/add", postAddIdea);
-// app.get("/ideas", getIdeas);
-// app.delete("/ideas/:id", deleteIdea);
-// app.get("/ideas/edit/(:id)", getEditIdea);
-// app.put("/ideas/edit/:id", putEditIdea);
-/** end of 4. */
-
 app.use("/ideas", ideasRoute);
-/** end of 11. */
 
 
 
