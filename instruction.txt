@@ -1,23 +1,42 @@
-========== set up Register function (continue) ==========
+=========== handle valid input data in register (continue) ===========
 
-1. npm i bcryptjs (bcrypt also works)
+1. in 'usersRoute.js': 
+    check whether the email is already registered. (in route.post("/register"))
+    find the input email in mongoDB
+
+========== set up Login function ==========
+
+2.  npm i passport
+    npm i passport-local
+
+3. create folder 'config' under 'IdeaNotes'
+
+4. inside folder 'config':
+    create 'passportConfig.js'
+
+5. inside 'app.js': 
+    // load passport 
+    import passport from "passport";
+    import passportConfig from "./config/passportConfig.js";
+    passportConfig(passport);
+
+6. write routes in 'usersRoute.js' for "/login"
+    (together with the functions, we will extract the function later)
+    remember to import passport in 'usersRoute.js'
+    
+7. check whether the code works properly
+    if login successful, the page will redirect to "/ideas" 
+    if login failed, the page remain at "/users/login" with empty input field 
 
 
-2. in 'usersRoute.js': 
-        import bcrypt from "bcryptjs";
-        import User from "../models/Users.js";
+========== display failure message when login failed ==========
+
+8. add some lines in '_error.handlebars'
+    to handle "fail_passport" message from 'passportConfig.js'
+
+9. in 'app.js':
+    add  res.locals.fail_passport = req.flash("fail_passport");
 
 
-=========== handle valid input data in register ===========
-
-3. calculate the hash of the input password (using bcryptjs)
-    - generate salt for hash 
-    - hash password with the salt
-    - save name, email, the calculated hash into mongoDB
-
-4. show successful message and redirect to "/users/login" instead of "/"
-
-
-5. if add user successfully, you can see the inserted document in mongoDB by using find() in collections 'users'
-    use note-dev
-    db.users.find().pretty()
+~. Read more to get better understanding : 
+    https://medium.com/tds-note/how-failure-message-works-in-passport-js-512e453af8a3

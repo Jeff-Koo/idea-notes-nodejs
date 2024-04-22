@@ -28,6 +28,13 @@ import ideasRoute from "./routes/ideasRoute.js";
 // import usersRoute 
 import usersRoute from "./routes/usersRoute.js";
 
+/** 5. */
+// load passport 
+import passport from "passport";
+import passportConfig from "./config/passportConfig.js";
+passportConfig(passport);
+/** end of 5. */
+
 const app = express();
 
 // setup handlebars middleware
@@ -42,6 +49,7 @@ app.use(bodyParser.json());        // parse application/json (support JSON-encod
 
 // put methodOverride middleware with "_method" 
 app.use(methodOverride("_method"));
+
 
 // set up an express-session
 app.use(
@@ -59,8 +67,16 @@ app.use(flash());
 app.use(function(req, res, next) {
   res.locals.success_msg = req.flash("success_msg");
   res.locals.error_msg = req.flash("error_msg");
+
+  /** 9. */
+  res.locals.fail_passport = req.flash("fail_passport");
+  // res.locals.fail_passport    refers to {{fail_passport}} in '_error.handlebars'
+  // req.flash("fail_passport")  refers to {type:"fail_passport"} in 'passportConfig.js'
+  /** end of 9. */
+
   next();
 })
+
 
 
 app.get("/", (req, res) => {

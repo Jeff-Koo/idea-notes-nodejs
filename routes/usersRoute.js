@@ -1,10 +1,8 @@
 import express from "express";
-
-/** 2. */
 import bcrypt from "bcryptjs";
+import passport from "passport";
 
 import User from "../models/Users.js";
-/** end of 2. */
 
 const router = express.Router();
 
@@ -43,8 +41,19 @@ router.post("/register", (req, res) => {
             password2 : req.body.password2,
         })
     } else {
-        // later we will check whether the email is already registered
 
+        /** 1. */
+        // check whether the email is already registered
+        // find the input email in mongoDB
+        User.findOne({email: req.body.email}).then( (user) => {
+            if (user) {
+                // if there is result return from mongoDB, the email exists in mongoDB
+                // the email is registered, show error message 
+                req.flash("error_msg", "Email already regsitered ! ");
+                res.redirect("/users/register");
+            }
+        });
+        /** end of 1. */
         
         // if input ok, then register the user, save data in mongoDB (in the next Step)
         // make a variable 'newUser' which is 'User' type 
@@ -55,7 +64,6 @@ router.post("/register", (req, res) => {
             password : req.body.password,
         });
 
-        /** 3. */
         // generate salt with saltRound = 10, pass the salt to callback function
         bcrypt.genSalt(10, (err, salt) => {
 
@@ -67,11 +75,9 @@ router.post("/register", (req, res) => {
                 newUser.password = hash;
                 newUser.save()
                     .then( () => {
-                        /** 4. */
                         // give the sucess message and redirect to login page (have not set yet)
                         req.flash("success_msg", "Regsiter Done!");
                         res.redirect("/users/login");
-                        /** end of 4. */
                     })
                     .catch((err) => {
                         // in case the document cannot save into mongoDB
@@ -83,10 +89,28 @@ router.post("/register", (req, res) => {
             });
         });
         
-        /** end of 3. */
     }
-
-
 });
+
+/** 6. */
+router.get("/login", (req, res) => {
+    res.render("users/login");
+});
+
+
+router.post("/login", (req, res, next) => {
+    passport.authenticate("local", {            // local follow  {Strategy as LocalStrategy} from "passport-local" 
+        successRedirect : "/ideas",
+        failureRedirect : "/users/login",
+        failureFlash : true,                    // turn on flash, to make fail_passport message
+        
+        // set session : false for now, will be removed later
+        session: false,
+        
+    })(req, res, next);                         // IIFE 
+});
+/** end of 6. */
+
+
 
 export default router;
