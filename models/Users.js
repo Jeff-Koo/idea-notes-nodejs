@@ -16,6 +16,16 @@ const UserSchema = new Schema( {
         type : String,
         required : true,
     },
+    /** 6. */
+    avatar : {
+        data: {
+            type : Buffer,  // user Buffer to store the data of image in Base64
+        }, 
+        contentType: {
+            type : String,
+        }
+    },
+    /** end of 6. */
 });
 
 const User = mongoose.model("users", UserSchema);

@@ -1,0 +1,21 @@
+<div class="card card-body mb-2">
+    <p><b>Your Name: </b>  {{name}}</p>
+    <p><b>Your Email: </b> {{email}}</p>
+
+    <p><b>Your Avatar: </b>
+        <!-- will show avatar here later -->
+    </p>
+    <br />
+
+    <!-- prepare the form for uploading image file as avatar -->
+    <!-- enctype="nultipart/form-data" is needed to upload file -->
+    <form action="/users/profile" enctype="multipart/form-data" method="POST">
+        <div>
+            <label for="avatarUpload" class="form-label">Upload New Image for Avatar</label>
+            <input type="file" id="avatarUpload" name="avatarUpload" class="form-control">
+        </div>
+        <br />
+        <button type="submit" class="btn btn-primary">Upload Avatar</button>
+    </form>
+   
+</div>

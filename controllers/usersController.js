@@ -103,3 +103,14 @@ export const getLogout = (req, res) => {
     req.flash("success_msg", "You're logged out!");
     res.redirect("/users/login")
 };
+
+/** 4. */
+export const getProfile = (req, res) => {
+    res.render("users/profile", { 
+        name : res.locals.user.name,
+        email : res.locals.user.email,
+    });
+};
+/** end of 4. */
+
+

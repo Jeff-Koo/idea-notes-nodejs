@@ -1,26 +1,40 @@
-========== showing static contents (images) in NodeJS website ==========
-    need to set a static folder 'public'
+========== prepare User Profile page for later upload avatar image ==========
 
-1. inside folder 'views':
-    create folder 'public'
+1. in folder 'views/users':
+    create 'profile.handlebars'
+        show current user information
+            - name
+            - email
+            - avatar (will show later)
+            - HTML form for uploading avatar
 
-2. inside folder 'public':
-    create folder 'img'
+2. in '_navbar.handlebars': 
+    add hyperlink item for accessing 'profile' page
+    <li>
+        <a class="nav-link" href="/users/profile">Profile</a>
+    </li>
 
-3. inside folder 'img':
-    put some image files 
-        - favicon.ico (may use https://www.favicon.cc/ to draw .ico file)
-        - logo.png
+3. write get route in 'usersRoute.js' for "/profile":
+    router.get("/profile", getProfile);
+    remember to import { getProfile } from "../controllers/usersController.js"
 
-4. in 'app.js': 
-    add code with express.static 
+4. write the function getProfile in 'usersController.js':
+    export const getProfile = (req, res) => { ... };
 
-5. in '_navbar.handlebars': 
-    add <div><img /></div> for showing 'logo.png' 
+5. check whether the 'Profile' page render correctly.
 
-6. in 'main.handlebars': 
-    add <link rel="icon"> for showing 'favicon.ico'
-    (animated 'favicon.ico' only works in Firefox)
+6. modify 'Users.js' in folder 'models'
+    add 1 more field called "avatar" with 2 fields inside "avatar"
+        
+        avatar : {
+            data: {
+                type : Buffer,
+            }, 
+            contentType: {
+                type : String,
+            }
+        },
+    
+    * we are going to store image in mongoDB in format of Base64 (type : Buffer)
 
-7. check whether the image show properly (especially in Add Notes page, Edit Note page)
-
+~ continue upload image in the next Step
