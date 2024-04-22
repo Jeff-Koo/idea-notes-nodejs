@@ -1,24 +1,23 @@
-========== create Users model and set up Register function ==========
+========== set up Register function (continue) ==========
 
-1. inside 'views' folder: create folder 'users'
+1. npm i bcryptjs (bcrypt also works)
 
-2. inside 'views/users' folder: create 'login.handlebars'
 
-3. inside 'views/users' folder: create 'register.handlebars'
+2. in 'usersRoute.js': 
+        import bcrypt from "bcryptjs";
+        import User from "../models/Users.js";
 
-4. add <a href=""> for going to register page, login page  in '_navbar.handlebars'
 
-5. inside 'models' folder: create 'Users.js'  (import mongoose)
+=========== handle valid input data in register ===========
 
-6. inside 'routes' folder: create 'usersRoute.js' (import express)
+3. calculate the hash of the input password (using bcryptjs)
+    - generate salt for hash 
+    - hash password with the salt
+    - save name, email, the calculated hash into mongoDB
 
-7. write routes in 'usersRoute.js' for "/register" 
-    (together with the functions, we will extract the function later)
+4. show successful message and redirect to "/users/login" instead of "/"
 
-8. add codes in 'app.js'
-    import usersRoute from "./routes/usersRoute.js"
-    app.use("/users", usersRoute);  // before app.use("*")
 
-9. check whether the register page works properly
-    error message will show if there is invalid input
-    if no error message, the page will redirect to Home page
+5. if add user successfully, you can see the inserted document in mongoDB by using find() in collections 'users'
+    use note-dev
+    db.users.find().pretty()

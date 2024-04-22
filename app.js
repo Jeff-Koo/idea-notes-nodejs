@@ -25,11 +25,8 @@ mongoose
 
 // import ideasRoute 
 import ideasRoute from "./routes/ideasRoute.js";
-
-/** 8. */
 // import usersRoute 
 import usersRoute from "./routes/usersRoute.js";
-/** end of 8. */
 
 const app = express();
 
