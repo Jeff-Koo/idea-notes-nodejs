@@ -13,10 +13,10 @@ const router = express.Router();
 router.route("/add").get(getAddIdea).post(postAddIdea);
 
 
-/** 5. */
+
 // import ensureAuthenticated from "../helpers/auth.js";
 // router.route("/add").get(ensureAuthenticated, getAddIdea).post(ensureAuthenticated, postAddIdea);
-/** end of 5. */
+
 
 
 

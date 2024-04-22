@@ -31,7 +31,13 @@ export const postAddIdea = (req, res) => {
     const newUser = {
       title: req.body.title,
       details: req.body.details,
+
+      /** 2. */
+      userID : res.locals.user._id, // get the user._id which stored in express-session 
+      /** end of 2. */
+
     };
+
     new Idea(newUser).save().then(() => {
       req.flash("success_msg", "Note Added!");
       res.redirect("/ideas"); // redirect refers to the route defined : app.get('xxx')
@@ -40,7 +46,9 @@ export const postAddIdea = (req, res) => {
 };
 
 export const getIdeas = (req, res) => {
-  Idea.find() // getting the result in 'ideas' collection by using find()
+  /** 4. */
+  Idea.find( {userID : res.locals.user._id} ) // getting the result in 'ideas' collection by using find()
+  /** end of 4. */
     .lean()
     .sort({ date: "desc" })
     .then((ideasDB) => {
@@ -63,8 +71,8 @@ export const deleteIdea = (req, res) => {
 
 export const getEditIdea = (req, res) => {
   Idea.findOne({
-  // use findOne to return only 1 object with ID
-  _id: req.params.id,
+    // use findOne to return only 1 object with ID
+    _id: req.params.id,
   })
   .lean()
   .then((ideaDB) => {

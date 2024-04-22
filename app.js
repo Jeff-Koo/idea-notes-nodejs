@@ -84,7 +84,7 @@ app.use(function(req, res, next) {
 
   // add a line to check whether the login session works properly
   // console.log("===== LOGIN USER =====", res.locals.user); 
-
+  
   next();
 })
 
@@ -100,12 +100,11 @@ app.get("/about", (req, res) => {
 });
 
 
-/** 8. */
+
 import ensureAuthenticated from "./helpers/auth.js";
 app.use("/ideas", ensureAuthenticated, ideasRoute);
-/** end of 8. */
-
 app.use("/users", usersRoute);
+
 
 
 // when the route is not handled by the routes above, then finally handle by route "404"

@@ -1,53 +1,38 @@
-========== format the routes of 'ideasRoute.js' and 'usersRoute.js' ==========
-
-1. use .route() to make the SAME routes together
-    e.g.:
-        router.get("/add", getAddIdea);
-        router.post("/add", postAddIdea);
-        -->  router.route("/add").get(getAddIdea).post(postAddIdea);
-
+========== modify 'Ideas.js' in models ==========
     
-2. check whether the functions still work properly after changing the codes. 
+    === we want to know who is the author for the idea notes ===
+
+1. in folder 'models': in 'Ideas.js': 
+    add 1 more field called "userID" with 
+        type : mongoose.Types.ObjectId,
+        (do not add  reuqired:true  at this point )
+    
+2. in 'ideasController.js' : postAddIdea(): 
+    add userID in newUser
+    
+3. try add a new idea, check whether the newly inserted idea contains  'userID' field with 'ObjectId'
+    use note-dev
+    db.ideas.find().pretty()
 
 
-========== protect the routes from the unauthorized user  ==========
+    === the user should only see the notes created by himself ===
 
-    only login user can access the routes start with '/ideas': 
-        'Add Notes' page, 
-        'Notes' page, 
-        'Edit Note' page, 
-        'Delete Note' page
+4. in 'ideasController.js' : getIdeas(): 
+    add the query of {userID : res.locals.user._id} inside find()
 
-3. create folder 'helpers' inside 'IdeaNotes'
+5. check whether the changes applied successfuly
 
-4. inside folder 'helpers':
-    create 'auth.js'
+    if success, the page will be :
+        userA can only see noteA (created by userA)
+        userB can only see noteB (created by userB)
 
-
-version 1 (protect the specific page) :
-
-5. in 'ideasRoute.js':
-    import ensureAuthenticated from "../helpers/auth.js";
-    add "ensureAuthenticated" middleware to before "getAddIdea" and "postAddIdea"
-
-    e.g. router.route("/add").get(ensureAuthenticated, getAddIdea).post(ensureAuthenticated, postAddIdea);
-
-6. check by accessing localhost:3100/ideas/add,
-    the page will redirect to 'Login' page if the protection works 
-
-version 2 (protect all pages in '/ideas') :
-
-7. now you can undo the changes in 5. 
-    by removing "ensureAuthenticated" middleware from 'ideasRoute.js'
-
-8. in 'app.js':
-    import ensureAuthenticated from "./helpers/auth.js";
-    add "ensureAuthenticated" middleware to "/ideas" route
+6. clear the 'ideas' collection to prevent unexpected error
+    db.ideas.drop()
 
 
-9. check by accessing localhost:3100/ideas/add, 
-                      localhost:3100/ideas
-                      localhost:3100/ideas/edit/630c82ea9540f25d25ff2cf4
-    the page will redirect to 'Login' page if the protection works 
+7. modify 'Ideas.js' in models, in 'Ideas.js': 
+    add 1 more property in field "userID": 
+        required : true 
+
 
 
