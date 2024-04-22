@@ -1,25 +1,53 @@
-========== Separate codes of 'usersRoute.js' into MVC ==========
+========== format the routes of 'ideasRoute.js' and 'usersRoute.js' ==========
 
-1. extract functions from the routes in 'usersRoute.js'
+1. use .route() to make the SAME routes together
+    e.g.:
+        router.get("/add", getAddIdea);
+        router.post("/add", postAddIdea);
+        -->  router.route("/add").get(getAddIdea).post(postAddIdea);
 
-2. in folder 'controllers':
-    create 'usersController.js'
+    
+2. check whether the functions still work properly after changing the codes. 
 
-3. move the functions from 'usersRoute.js' to 'usersController.js'
 
-4. add 'export' in front of each function in 'usersController.js'
+========== protect the routes from the unauthorized user  ==========
 
-5. import the neccessary modules, packages in 'usersController.js'
-    import bcrypt from "bcryptjs";
-    import passport from "passport";
-    import User from "../models/Users.js";
+    only login user can access the routes start with '/ideas': 
+        'Add Notes' page, 
+        'Notes' page, 
+        'Edit Note' page, 
+        'Delete Note' page
 
-6. remove the unused modules, packages in 'usersRoute.js'
-    - bcryptjs
-    - passport
-    - Users.js
+3. create folder 'helpers' inside 'IdeaNotes'
 
-7. import functions from 'usersController.js' in 'usersRoute.js'
+4. inside folder 'helpers':
+    create 'auth.js'
 
-8. check whether the function still works properly after moving and importing functions. 
+
+version 1 (protect the specific page) :
+
+5. in 'ideasRoute.js':
+    import ensureAuthenticated from "../helpers/auth.js";
+    add "ensureAuthenticated" middleware to before "getAddIdea" and "postAddIdea"
+
+    e.g. router.route("/add").get(ensureAuthenticated, getAddIdea).post(ensureAuthenticated, postAddIdea);
+
+6. check by accessing localhost:3100/ideas/add,
+    the page will redirect to 'Login' page if the protection works 
+
+version 2 (protect all pages in '/ideas') :
+
+7. now you can undo the changes in 5. 
+    by removing "ensureAuthenticated" middleware from 'ideasRoute.js'
+
+8. in 'app.js':
+    import ensureAuthenticated from "./helpers/auth.js";
+    add "ensureAuthenticated" middleware to "/ideas" route
+
+
+9. check by accessing localhost:3100/ideas/add, 
+                      localhost:3100/ideas
+                      localhost:3100/ideas/edit/630c82ea9540f25d25ff2cf4
+    the page will redirect to 'Login' page if the protection works 
+
 

@@ -1,12 +1,9 @@
-/** 5. */
 import bcrypt from "bcryptjs";
 import passport from "passport";
 
 import User from "../models/Users.js";
-/** end of 5. */
 
 
-/** 3. + 4. */
 export const getRegister = (req, res) => {
     res.render("users/register");   // follow file structure, start from 'views' folder
 };
@@ -106,5 +103,3 @@ export const getLogout = (req, res) => {
     req.flash("success_msg", "You're logged out!");
     res.redirect("/users/login")
 };
-
-/** end of 3. + 4. */

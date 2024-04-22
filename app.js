@@ -99,9 +99,13 @@ app.get("/about", (req, res) => {
   res.render("about");
 });
 
-app.use("/ideas", ideasRoute);
-app.use("/users", usersRoute);
 
+/** 8. */
+import ensureAuthenticated from "./helpers/auth.js";
+app.use("/ideas", ensureAuthenticated, ideasRoute);
+/** end of 8. */
+
+app.use("/users", usersRoute);
 
 
 // when the route is not handled by the routes above, then finally handle by route "404"
