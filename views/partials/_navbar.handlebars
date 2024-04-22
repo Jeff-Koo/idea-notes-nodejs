@@ -30,9 +30,23 @@
                             <a class="nav-link" href="/about">About</a>
                         </li>
 
+                        <!-- the part of dropdown meun of 'Notes' and Add 'Notes' button is moved -->
+
+                    </ul>
+                    
+                    <!-- add <ul> with  <li>  and  <a href=""> inside -->
+                    <!-- ml-auto to make this <ul> to the right-most -->
+                    <ul class="navbar-nav ml-auto">
+
+                        <!-- 3. set condition to check whether the user is logged in -->
+                        <!-- when user is logged in, 'user' is not null (truthy) -->
+                        <!-- when user is logged out, 'user' is null (falsy)-->
+                        {{#if user}} <!-- 'user' refers to res.locals.user -->
+                        
+                        <!-- 2. rearrange the order of the buttons -->
+
+                        <!-- 1. move the dropdown meun of 'Notes' and Add 'Notes' button here -->
                         <li class="nav-item dropdown">
-                            <!-- change data-toggle to data-bs-toggle in the following <a>
-                                change 'Dropdown' to 'Note'                                -->
                             <a class="nav-link dropdown-toggle" 
                                 href="#" 
                                 id="navbarDropdown" 
@@ -43,31 +57,28 @@
                             Note
                             </a>
                             <div class="dropdown-menu">
-                                <!-- change the route to '/ideas' and name with 'Notes' -->
                                 <a class="dropdown-item" href="/ideas">Notes</a>
                                 
-                                <!-- change the route to '/ideas/add' and name with 'Add Notes' -->
                                 <a class="dropdown-item" href="/ideas/add">Add Notes</a>
-                                
                             </div>
                         </li>
+                        <!-- end of 1. -->
 
-                    </ul>
-                    
-                    <!-- add <ul> with  <li>  and  <a href=""> inside -->
-                    <!-- ml-auto to make this <ul> to the right-most -->
-                    <ul class="navbar-nav ml-auto">
+                        <li>
+                            <a class="nav-link" href="/users/logout">Logout</a>
+                        </li>
+
+                        {{else}} <!-- 3. -->
+
                         <li class="nav-item">
                             <a class="nav-link" href="/users/login">Login</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="/users/register">Register</a>
                         </li>
-                        <!-- 1. -->
-                        <li>
-                            <a class="nav-link" href="/users/logout">Logout</a>
-                        </li>
-                        <!-- end of 1. -->
+
+                        {{/if}} <!-- 3. -->
+
                     </ul>
                     
                 </div>

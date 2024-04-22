@@ -1,17 +1,67 @@
-========== set logout function ==========
+========== make navbar with login / logout version ==========
 
-1. in '_navbar.handlebars': 
-    add hyperlink item for logout  
-    <li>
-        <a class="nav-link" href="/users/logout">Logout</a>
+    always show the 'Home' button and 'About' button
+
+    if user is logged in
+        show 'Add Notes' button
+        show 'Notes' button
+        show Logout' button
+    else
+        show 'Login' button
+        show 'register' button 
+
+
+in '_navbar.handlebars':
+
+1. move the dropdown menu ('Notes' and 'Add Notes') inside <ul class="navbar-nav ml-auto">
+    to be a part of the rightmost of the navbar
+
+2. rearrange the order of the buttons, the order as follows: 
+    
+    <li class="nav-item dropdown"><a> Note </a>
+        <div>
+            <a> Notes </a>
+            <a> Add Notes </a>
+        </div> 
     </li>
+    <li> <a> Logout </a> </li>
 
-2. write route in 'usersRoute.js' for "/logout" 
+    <li> <a> Login </a> </li>
+    <li> <a> Register </a> </li>
 
-3. check whether logout works properly by seeing the console.log message
-    the user information will be shown on console after login
-    the user information will be set to null after logout
+3. set condition to check whether the user is logged in with Built-in Helper in handlebars
+    {{#if }}
+    
+    <li class="nav-item dropdown"><a> Note </a>
+        <div>
+            <a> Notes </a>
+            <a> Add Notes </a>
+        </div> 
+    </li>
+    <li> <a> Logout </a> </li>
+
+    {{else}}
+    
+    <li> <a> Login </a> </li>
+    <li> <a> Register </a> </li>
+    
+    {{/if}}
 
 
 
 
+~. Extra on 'user' in handlebars 
+
+    <div>
+        Show 'user' detail in handlebars: 
+        {{#each user}}
+            {{@key}}: { 
+                {{#each this}}
+                    {{@key}} : {{this}} , 
+                {{/each}}
+            }
+            <br />
+        {{/each}} 
+    </div>
+
+    therefore, {{user._doc.email}} is the variable to show email of user in '*.handlebars', 

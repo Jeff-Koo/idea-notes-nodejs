@@ -101,7 +101,6 @@ router.post("/login", (req, res, next) => {
     })(req, res, next);                         // IIFE 
 });
 
-/** 2. */
 router.get("/logout", (req, res) => {
     req.logout( (err) => {
         if (err) throw err; 
@@ -109,7 +108,6 @@ router.get("/logout", (req, res) => {
     req.flash("success_msg", "You're logged out!");
     res.redirect("/users/login")
 });
-/** end of 2. */
 
 
 export default router;
