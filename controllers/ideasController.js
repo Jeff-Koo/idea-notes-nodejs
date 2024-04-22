@@ -80,7 +80,6 @@ export const putEditIdea = (req, res) => {
     _id: req.params.id,
   }).then((ideaDB) => {
 
-    /** 1. */
     // req.flash only handle a string, so we do not use array here
     let edit_error_msg = "";
     if (!req.body.title) {
@@ -89,9 +88,7 @@ export const putEditIdea = (req, res) => {
     if (!req.body.details) {
       edit_error_msg += "Please add some details. "
     }
-    /** end of 1. */
     
-    /** 2. */
     // use if-else statement, place update value in else part 
     if (edit_error_msg) {
       // if there is errors, edit_error_msg is not empty
@@ -111,8 +108,8 @@ export const putEditIdea = (req, res) => {
         req.flash("success_msg", "Note Updated!");
         res.redirect("/ideas");
       });
+
     }
-    /** end of 2. */
 
   });
 };

@@ -24,13 +24,12 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">    <!-- change the class -->
                         <li class="nav-item active">                <!-- remove class 'active' -->
-                            <!-- add aria-current="page" to <a>, change Home to route '/' -->
                             <a class="nav-link" aria-current="page" href="/">Home</a>
                         </li>
                         <li class="nav-item">
-                            <!-- change About to route '/about' -->
                             <a class="nav-link" href="/about">About</a>
                         </li>
+
                         <li class="nav-item dropdown">
                             <!-- change data-toggle to data-bs-toggle in the following <a>
                                 change 'Dropdown' to 'Note'                                -->
@@ -43,7 +42,6 @@
                                 aria-expanded="false">
                             Note
                             </a>
-                            <!-- remove aria-labelledby in the following <div> -->
                             <div class="dropdown-menu">
                                 <!-- change the route to '/ideas' and name with 'Notes' -->
                                 <a class="dropdown-item" href="/ideas">Notes</a>
@@ -51,15 +49,23 @@
                                 <!-- change the route to '/ideas/add' and name with 'Add Notes' -->
                                 <a class="dropdown-item" href="/ideas/add">Add Notes</a>
                                 
-                                <!-- remove the unnecessary <div> and <a> -->
                             </div>
                         </li>
 
-                        <!-- remove the unnecessary <li> -->
-                        
                     </ul>
                     
-                    <!-- remove the unnecessary <form> <input> <button> for searching function -->
+                    <!-- 4. -->
+                    <!-- add <ul> with  <li>  and  <a href=""> inside -->
+                    <!-- ml-auto to make this <ul> to the right-most -->
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/users/login">Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/users/register">Register</a>
+                        </li>
+                    </ul>
+                    <!-- end of 4. -->
                     
                 </div>
             </div> <!-- </div> of class="container-fluid" -->

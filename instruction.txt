@@ -1,28 +1,24 @@
-========== making flash messages for edit notes ==========
+========== create Users model and set up Register function ==========
 
-1. in 'ideasController.js'
-    check errors when edit the notes 
-    edit codes in putEditIdea()
-        "title" cannot be empty
-        "details" cannot be empty
+1. inside 'views' folder: create folder 'users'
 
-2. check empty before update value 
-      
-      set a string to store the error message
+2. inside 'views/users' folder: create 'login.handlebars'
 
-      if the string for error message is not empty
-         error occurs, 
-         show message, 
-         redirect to edit page
-      else 
-         update value, 
-         save to database, 
-         show success message, 
-         redirect to idea page
-   
+3. inside 'views/users' folder: create 'register.handlebars'
 
-3. remove 'required' attribute of the <input> and <textarea> in 'edit.handlebars'
+4. add <a href=""> for going to register page, login page  in '_navbar.handlebars'
 
-4. check if the error message shows 
-   when the fields are empty when editing the note 
-   
+5. inside 'models' folder: create 'Users.js'  (import mongoose)
+
+6. inside 'routes' folder: create 'usersRoute.js' (import express)
+
+7. write routes in 'usersRoute.js' for "/register" 
+    (together with the functions, we will extract the function later)
+
+8. add codes in 'app.js'
+    import usersRoute from "./routes/usersRoute.js"
+    app.use("/users", usersRoute);  // before app.use("*")
+
+9. check whether the register page works properly
+    error message will show if there is invalid input
+    if no error message, the page will redirect to Home page
